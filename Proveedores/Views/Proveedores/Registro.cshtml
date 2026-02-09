@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Registro";
+}
+
+<div ng-app="proveedoresApp" ng-controller="proveedoresController">
+
+    <h2>SOLICITUD DE REGISTRO AL PADRÓN DE PROVEEDORES</h2>
+
+    <form ng-submit="guardar()">
+
+        <!-- ================= DATOS GENERALES ================= -->
+        <h4>Datos Generales</h4>
+        <label>
+            <input type="checkbox" ng-model="proveedor.Persona_Fisica" /> Persona Física
+        </label>
+
+        <label>
+            <input type="checkbox" ng-model="proveedor.Persona_Moral" /> Persona Moral
+        </label>
+
+        <label>Razón Social *</label>
+        <input type="text" ng-model="proveedor.Razon_Social" required />
+
+        <label>RFC *</label>
+        <input type="text" ng-model="proveedor.RFC" maxlength="14" required />
+
+        <label>CURP</label>
+        <input type="text" ng-model="proveedor.CURP" />
+
+        <label>Giro comercial</label>
+        <input type="text" ng-model="proveedor.Giro_Comercial" />
+
+        
+
+        <hr />
+
+        <!-- ================= DOMICILIO ================= -->
+        <h4>Domicilio</h4>
+
+        <input placeholder="Calle" ng-model="proveedor.Calle" />
+        <input placeholder="Colonia" ng-model="proveedor.Colonia" />
+
+        <input placeholder="No. Exterior" ng-model="proveedor.No_Exterior" />
+        <input placeholder="No. Interior" ng-model="proveedor.No_Interior" />
+
+        <input placeholder="Código Postal" ng-model="proveedor.Codigo_Postal" />
+        <input placeholder="Localidad" ng-model="proveedor.Localidad" />
+        <input placeholder="Municipio" ng-model="proveedor.Municipio" />
+        <input placeholder="Estado" ng-model="proveedor.Estado" />
+
+        <hr />
+
+        <!-- ================= CONTACTO ================= -->
+        <h4>Datos de Contacto</h4>
+
+        <input placeholder="Teléfono" ng-model="proveedor.Telefono" />
+        <input placeholder="Fax" ng-model="proveedor.Fax" />
+        <input placeholder="Página Web" ng-model="proveedor.Pagina_Web" />
+
+        <hr />
+
+        <!-- ================= REPRESENTANTE ================= -->
+        <h4>Representante Legal</h4>
+
+        <input placeholder="Nombre" ng-model="proveedor.Rep_Nombre" />
+        <input placeholder="Teléfono" ng-model="proveedor.Rep_Telefono" />
+        <input placeholder="Extensión" ng-model="proveedor.Rep_Extension" />
+        <input placeholder="Correo electrónico" ng-model="proveedor.Rep_Correo_E" />
+
+        <input placeholder="Número de Acta" ng-model="proveedor.Rep_Numero_Acta" />
+        <input placeholder="Número de Poder" ng-model="proveedor.Rep_Numero_Poder" />
+        <input placeholder="Notario / Notaría" ng-model="proveedor.Rep_Notario_Notaria" />
+        <input placeholder="Persona que realiza el trámite" ng-model="proveedor.Rep_Personal_Tramite" />
+
+        <hr />
+
+        <!-- ================= DATOS BANCARIOS ================= -->
+        <h4>Datos Bancarios</h4>
+
+        <input placeholder="Banco" ng-model="proveedor.Ban_Banco" />
+        <input placeholder="Cuenta" ng-model="proveedor.Ban_Cuenta" />
+        <input placeholder="Sucursal" ng-model="proveedor.Ban_Sucursal" />
+        <input placeholder="CLABE" ng-model="proveedor.Ban_Clabe" />
+
+        <br /><br />
+
+        <button type="submit">Enviar Solicitud</button>
+
+    </form>
+</div>
+
+
+
