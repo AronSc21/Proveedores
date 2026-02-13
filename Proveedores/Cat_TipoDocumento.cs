@@ -12,18 +12,22 @@ namespace Proveedores
     using System;
     using System.Collections.Generic;
     
-    public partial class TipoDocumento
+    public partial class Cat_TipoDocumento
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TipoDocumento()
+        public Cat_TipoDocumento()
         {
-            this.Documentos = new HashSet<Documentos>();
+            this.Documentos_Proveedor = new HashSet<Documentos_Proveedor>();
+            this.Requisitos_Tramite = new HashSet<Requisitos_Tramite>();
         }
     
-        public int id { get; set; }
-        public string tipoDocumento1 { get; set; }
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Documentos> Documentos { get; set; }
+        public virtual ICollection<Documentos_Proveedor> Documentos_Proveedor { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Requisitos_Tramite> Requisitos_Tramite { get; set; }
     }
 }

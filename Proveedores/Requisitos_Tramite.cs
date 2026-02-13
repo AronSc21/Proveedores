@@ -12,15 +12,16 @@ namespace Proveedores
     using System;
     using System.Collections.Generic;
     
-    public partial class Documentos
+    public partial class Requisitos_Tramite
     {
-        public int id { get; set; }
-        public int idTipoDocumento { get; set; }
-        public int idProveedor { get; set; }
-        public string rutaRelativa { get; set; }
-        public System.DateTime fechaAlta { get; set; }
-        public Nullable<System.DateTime> fechaBaja { get; set; }
+        public int Id { get; set; }
+        public int IdTipoTramite { get; set; }
+        public int IdTipoPersona { get; set; }
+        public int IdTipoDocumento { get; set; }
+        public bool Obligatorio { get; set; }
     
-        public virtual TipoDocumento TipoDocumento { get; set; }
+        public virtual Cat_TipoDocumento Cat_TipoDocumento { get; set; }
+        public virtual Cat_TipoPersona Cat_TipoPersona { get; set; }
+        public virtual Cat_TipoTramite Cat_TipoTramite { get; set; }
     }
 }

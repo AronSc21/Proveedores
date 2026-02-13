@@ -5,15 +5,25 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="c9b863bdd87e478ba92b3326c00b6b5b" Name="Diagram1">
-        <EntityTypeShape EntityType="ProveedoresModel.Documentos" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="ProveedoresModel.Proveedores" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ProveedoresModel.Proveedores_Validacion" Width="1.5" PointX="3" PointY="8.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ProveedoresModel.Refrendos" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ProveedoresModel.TipoDocumento" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ProveedoresModel.Usuarios_Proveedores" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="true" />
-        <AssociationConnector Association="ProveedoresModel.FK_Documentos_TipoDocumento" ManuallyRouted="false" />
-        <AssociationConnector Association="ProveedoresModel.FK_Proveedores_Validacion_Proveedores" ManuallyRouted="false" />
-      </Diagram>
+        <EntityTypeShape EntityType="ProveedoresModel.Cat_TipoDocumento" Width="1.5" PointX="3.75" PointY="5.375" />
+        <EntityTypeShape EntityType="ProveedoresModel.Cat_TipoPersona" Width="1.5" PointX="6.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ProveedoresModel.Cat_TipoTramite" Width="1.5" PointX="0.75" PointY="8.625" />
+        <EntityTypeShape EntityType="ProveedoresModel.Documentos_Proveedor" Width="1.5" PointX="6" PointY="8" />
+        <EntityTypeShape EntityType="ProveedoresModel.Proveedores_Validacion" Width="1.5" PointX="11.25" PointY="8.625" />
+        <EntityTypeShape EntityType="ProveedoresModel.Refrendos" Width="1.5" PointX="3.375" PointY="2" />
+        <EntityTypeShape EntityType="ProveedoresModel.Requisitos_Tramite" Width="1.5" PointX="3" PointY="8.375" />
+        <EntityTypeShape EntityType="ProveedoresModel.Usuarios_Proveedores" Width="1.5" PointX="5.75" PointY="2" />
+        <AssociationConnector Association="ProveedoresModel.FK_Doc_TipoDocumento" />
+        <AssociationConnector Association="ProveedoresModel.FK_Requisitos_TipoDocumento" />
+        <AssociationConnector Association="ProveedoresModel.FK_Requisitos_TipoPersona" />
+        <AssociationConnector Association="ProveedoresModel.FK_Doc_TipoTramite" />
+        <AssociationConnector Association="ProveedoresModel.FK_Requisitos_TipoTramite" />
+        <EntityTypeShape EntityType="ProveedoresModel.Proveedores" Width="1.5" PointX="9" PointY="3.25" />
+        <AssociationConnector Association="ProveedoresModel.FK_Proveedor_TipoPersona" />
+        <AssociationConnector Association="ProveedoresModel.FK_Proveedor_TipoTramite" />
+        <AssociationConnector Association="ProveedoresModel.FK_Doc_Proveedor" />
+        <AssociationConnector Association="ProveedoresModel.FK_Proveedores_Validacion_Proveedores" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

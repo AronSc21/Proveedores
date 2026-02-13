@@ -17,6 +17,7 @@ namespace Proveedores
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Proveedores()
         {
+            this.Documentos_Proveedor = new HashSet<Documentos_Proveedor>();
             this.Proveedores_Validacion = new HashSet<Proveedores_Validacion>();
         }
     
@@ -53,13 +54,15 @@ namespace Proveedores
         public string Ban_Sucursal { get; set; }
         public string Ban_Clabe { get; set; }
         public Nullable<System.DateTime> Fecha_Solicitud { get; set; }
-        public Nullable<bool> Persona_Moral { get; set; }
-        public Nullable<bool> Persona_Fisica { get; set; }
-        public Nullable<bool> Alta { get; set; }
-        public Nullable<bool> Modificacion { get; set; }
-        public Nullable<bool> Renovacion { get; set; }
         public Nullable<System.DateTime> Fecha_Aceptacion { get; set; }
+        public Nullable<int> IdTipoPersona { get; set; }
+        public Nullable<int> IdTipoTramite { get; set; }
+        public System.DateTime Fecha_Alta { get; set; }
     
+        public virtual Cat_TipoPersona Cat_TipoPersona { get; set; }
+        public virtual Cat_TipoTramite Cat_TipoTramite { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Documentos_Proveedor> Documentos_Proveedor { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Proveedores_Validacion> Proveedores_Validacion { get; set; }
     }

@@ -27,12 +27,15 @@ namespace Proveedores
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Documentos> Documentos { get; set; }
-        public virtual DbSet<Proveedores> Proveedores { get; set; }
+        public virtual DbSet<Cat_TipoDocumento> Cat_TipoDocumento { get; set; }
+        public virtual DbSet<Cat_TipoPersona> Cat_TipoPersona { get; set; }
+        public virtual DbSet<Cat_TipoTramite> Cat_TipoTramite { get; set; }
+        public virtual DbSet<Documentos_Proveedor> Documentos_Proveedor { get; set; }
         public virtual DbSet<Proveedores_Validacion> Proveedores_Validacion { get; set; }
         public virtual DbSet<Refrendos> Refrendos { get; set; }
-        public virtual DbSet<TipoDocumento> TipoDocumento { get; set; }
+        public virtual DbSet<Requisitos_Tramite> Requisitos_Tramite { get; set; }
         public virtual DbSet<Usuarios_Proveedores> Usuarios_Proveedores { get; set; }
+        public virtual DbSet<Proveedores> Proveedores { get; set; }
     
         public virtual ObjectResult<csp_buscar_provedor_RFC_Result> csp_buscar_provedor_RFC(string rFC, Nullable<int> numProveedor)
         {

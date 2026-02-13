@@ -4,17 +4,42 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ProveedoresModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Documentos">
+    <Schema Namespace="ProveedoresModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cat_TipoDocumento">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="idTipoDocumento" Type="int" Nullable="false" />
-          <Property Name="idProveedor" Type="int" Nullable="false" />
-          <Property Name="rutaRelativa" Type="varchar(max)" Nullable="false" />
-          <Property Name="fechaAlta" Type="datetime" Nullable="false" />
-          <Property Name="fechaBaja" Type="datetime" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Cat_TipoPersona">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cat_TipoTramite">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Documentos_Proveedor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdProveedor" Type="int" Nullable="false" />
+          <Property Name="IdTipoDocumento" Type="int" Nullable="false" />
+          <Property Name="IdTipoTramite" Type="int" Nullable="false" />
+          <Property Name="RutaArchivo" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="FechaCarga" Type="datetime" Nullable="false" />
+          <Property Name="Validado" Type="bit" />
+          <Property Name="Observaciones" Type="varchar" MaxLength="255" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Proveedores">
           <Key>
@@ -52,13 +77,11 @@
           <Property Name="Ban_Cuenta" Type="varchar" MaxLength="50" />
           <Property Name="Ban_Sucursal" Type="varchar" MaxLength="50" />
           <Property Name="Ban_Clabe" Type="varchar" MaxLength="50" />
-          <Property Name="Fecha_Solicitud" Type="datetime" />
-          <Property Name="Persona_Moral" Type="bit" />
-          <Property Name="Persona_Fisica" Type="bit" />
-          <Property Name="Alta" Type="bit" />
-          <Property Name="Modificacion" Type="bit" />
-          <Property Name="Renovacion" Type="bit" />
+          <Property Name="Fecha_Solicitud" Type="date" />
           <Property Name="Fecha_Aceptacion" Type="datetime" />
+          <Property Name="IdTipoPersona" Type="int" />
+          <Property Name="IdTipoTramite" Type="int" />
+          <Property Name="Fecha_Alta" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Proveedores_Validacion">
           <Key>
@@ -81,12 +104,15 @@
           <Property Name="fechaResolucion" Type="datetime" />
           <Property Name="Estatus" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="TipoDocumento">
+        <EntityType Name="Requisitos_Tramite">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="tipoDocumento" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdTipoTramite" Type="int" Nullable="false" />
+          <Property Name="IdTipoPersona" Type="int" Nullable="false" />
+          <Property Name="IdTipoDocumento" Type="int" Nullable="false" />
+          <Property Name="Obligatorio" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Usuarios_Proveedores">
           <Key>
@@ -96,15 +122,63 @@
           <Property Name="usuario" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="contrasena" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Documentos_TipoDocumento">
-          <End Role="TipoDocumento" Type="Self.TipoDocumento" Multiplicity="1" />
-          <End Role="Documentos" Type="Self.Documentos" Multiplicity="*" />
+        <Association Name="FK_Doc_Proveedor">
+          <End Role="Proveedores" Type="Self.Proveedores" Multiplicity="1" />
+          <End Role="Documentos_Proveedor" Type="Self.Documentos_Proveedor" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="TipoDocumento">
-              <PropertyRef Name="id" />
+            <Principal Role="Proveedores">
+              <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Documentos">
-              <PropertyRef Name="idTipoDocumento" />
+            <Dependent Role="Documentos_Proveedor">
+              <PropertyRef Name="IdProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Doc_TipoDocumento">
+          <End Role="Cat_TipoDocumento" Type="Self.Cat_TipoDocumento" Multiplicity="1" />
+          <End Role="Documentos_Proveedor" Type="Self.Documentos_Proveedor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoDocumento">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Documentos_Proveedor">
+              <PropertyRef Name="IdTipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Doc_TipoTramite">
+          <End Role="Cat_TipoTramite" Type="Self.Cat_TipoTramite" Multiplicity="1" />
+          <End Role="Documentos_Proveedor" Type="Self.Documentos_Proveedor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoTramite">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Documentos_Proveedor">
+              <PropertyRef Name="IdTipoTramite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Proveedor_TipoPersona">
+          <End Role="Cat_TipoPersona" Type="Self.Cat_TipoPersona" Multiplicity="0..1" />
+          <End Role="Proveedores" Type="Self.Proveedores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoPersona">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Proveedores">
+              <PropertyRef Name="IdTipoPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Proveedor_TipoTramite">
+          <End Role="Cat_TipoTramite" Type="Self.Cat_TipoTramite" Multiplicity="0..1" />
+          <End Role="Proveedores" Type="Self.Proveedores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoTramite">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Proveedores">
+              <PropertyRef Name="IdTipoTramite" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -117,6 +191,42 @@
             </Principal>
             <Dependent Role="Proveedores_Validacion">
               <PropertyRef Name="idProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisitos_TipoDocumento">
+          <End Role="Cat_TipoDocumento" Type="Self.Cat_TipoDocumento" Multiplicity="1" />
+          <End Role="Requisitos_Tramite" Type="Self.Requisitos_Tramite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoDocumento">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Requisitos_Tramite">
+              <PropertyRef Name="IdTipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisitos_TipoPersona">
+          <End Role="Cat_TipoPersona" Type="Self.Cat_TipoPersona" Multiplicity="1" />
+          <End Role="Requisitos_Tramite" Type="Self.Requisitos_Tramite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoPersona">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Requisitos_Tramite">
+              <PropertyRef Name="IdTipoPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisitos_TipoTramite">
+          <End Role="Cat_TipoTramite" Type="Self.Cat_TipoTramite" Multiplicity="1" />
+          <End Role="Requisitos_Tramite" Type="Self.Requisitos_Tramite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoTramite">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Requisitos_Tramite">
+              <PropertyRef Name="IdTipoTramite" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -541,160 +651,57 @@
           <Parameter Name="id" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="ProveedoresModelStoreContainer">
-          <EntitySet Name="Documentos" EntityType="Self.Documentos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cat_TipoDocumento" EntityType="Self.Cat_TipoDocumento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cat_TipoPersona" EntityType="Self.Cat_TipoPersona" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cat_TipoTramite" EntityType="Self.Cat_TipoTramite" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Documentos_Proveedor" EntityType="Self.Documentos_Proveedor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Proveedores" EntityType="Self.Proveedores" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Proveedores_Validacion" EntityType="Self.Proveedores_Validacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Refrendos" EntityType="Self.Refrendos" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TipoDocumento" EntityType="Self.TipoDocumento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Requisitos_Tramite" EntityType="Self.Requisitos_Tramite" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuarios_Proveedores" EntityType="Self.Usuarios_Proveedores" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Documentos_TipoDocumento" Association="Self.FK_Documentos_TipoDocumento">
-            <End Role="TipoDocumento" EntitySet="TipoDocumento" />
-            <End Role="Documentos" EntitySet="Documentos" />
+          <AssociationSet Name="FK_Doc_Proveedor" Association="Self.FK_Doc_Proveedor">
+            <End Role="Proveedores" EntitySet="Proveedores" />
+            <End Role="Documentos_Proveedor" EntitySet="Documentos_Proveedor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Doc_TipoDocumento" Association="Self.FK_Doc_TipoDocumento">
+            <End Role="Cat_TipoDocumento" EntitySet="Cat_TipoDocumento" />
+            <End Role="Documentos_Proveedor" EntitySet="Documentos_Proveedor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Doc_TipoTramite" Association="Self.FK_Doc_TipoTramite">
+            <End Role="Cat_TipoTramite" EntitySet="Cat_TipoTramite" />
+            <End Role="Documentos_Proveedor" EntitySet="Documentos_Proveedor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Proveedor_TipoPersona" Association="Self.FK_Proveedor_TipoPersona">
+            <End Role="Cat_TipoPersona" EntitySet="Cat_TipoPersona" />
+            <End Role="Proveedores" EntitySet="Proveedores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Proveedor_TipoTramite" Association="Self.FK_Proveedor_TipoTramite">
+            <End Role="Cat_TipoTramite" EntitySet="Cat_TipoTramite" />
+            <End Role="Proveedores" EntitySet="Proveedores" />
           </AssociationSet>
           <AssociationSet Name="FK_Proveedores_Validacion_Proveedores" Association="Self.FK_Proveedores_Validacion_Proveedores">
             <End Role="Proveedores" EntitySet="Proveedores" />
             <End Role="Proveedores_Validacion" EntitySet="Proveedores_Validacion" />
           </AssociationSet>
+          <AssociationSet Name="FK_Requisitos_TipoDocumento" Association="Self.FK_Requisitos_TipoDocumento">
+            <End Role="Cat_TipoDocumento" EntitySet="Cat_TipoDocumento" />
+            <End Role="Requisitos_Tramite" EntitySet="Requisitos_Tramite" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisitos_TipoPersona" Association="Self.FK_Requisitos_TipoPersona">
+            <End Role="Cat_TipoPersona" EntitySet="Cat_TipoPersona" />
+            <End Role="Requisitos_Tramite" EntitySet="Requisitos_Tramite" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisitos_TipoTramite" Association="Self.FK_Requisitos_TipoTramite">
+            <End Role="Cat_TipoTramite" EntitySet="Cat_TipoTramite" />
+            <End Role="Requisitos_Tramite" EntitySet="Requisitos_Tramite" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ProveedoresModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Documentos">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="idTipoDocumento" Type="Int32" Nullable="false" />
-          <Property Name="idProveedor" Type="Int32" Nullable="false" />
-          <Property Name="rutaRelativa" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="fechaAlta" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="fechaBaja" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="TipoDocumento" Relationship="Self.FK_Documentos_TipoDocumento" FromRole="Documentos" ToRole="TipoDocumento" />
-        </EntityType>
-        <EntityType Name="Proveedores">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Razon_Social" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="RFC" Type="String" MaxLength="14" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CURP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Calle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Colonia" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="No_Exterior" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="No_Interior" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="Codigo_Postal" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Localidad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Municipio" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Estado" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Pagina_Web" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Estratificacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Giro_Comercial" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Extension" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Correo_E" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Numero_Acta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Numero_Poder" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Notario_Notaria" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Personal_Tramite" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Tra_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Tra_Extension" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Tra_Correo_E" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Ban_Banco" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Ban_Cuenta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Ban_Sucursal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Ban_Clabe" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Fecha_Solicitud" Type="DateTime" Precision="3" />
-          <Property Name="Persona_Moral" Type="Boolean" />
-          <Property Name="Persona_Fisica" Type="Boolean" />
-          <Property Name="Alta" Type="Boolean" />
-          <Property Name="Modificacion" Type="Boolean" />
-          <Property Name="Renovacion" Type="Boolean" />
-          <Property Name="Fecha_Aceptacion" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Proveedores_Validacion" Relationship="Self.FK_Proveedores_Validacion_Proveedores" FromRole="Proveedores" ToRole="Proveedores_Validacion" />
-        </EntityType>
-        <EntityType Name="Proveedores_Validacion">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="idProveedor" Type="Int32" Nullable="false" />
-          <Property Name="anio" Type="Int32" Nullable="false" />
-          <Property Name="fecha_renovacion" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="fecha_validacion" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Proveedores" Relationship="Self.FK_Proveedores_Validacion_Proveedores" FromRole="Proveedores_Validacion" ToRole="Proveedores" />
-        </EntityType>
-        <EntityType Name="Refrendos">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="idProveedor" Type="Int32" Nullable="false" />
-          <Property Name="anio" Type="Int32" Nullable="false" />
-          <Property Name="fechaSolicitud" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="fechaResolucion" Type="DateTime" Precision="3" />
-          <Property Name="Estatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-        </EntityType>
-        <EntityType Name="TipoDocumento">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="tipoDocumento1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Documentos" Relationship="Self.FK_Documentos_TipoDocumento" FromRole="TipoDocumento" ToRole="Documentos" />
-        </EntityType>
-        <EntityType Name="Usuarios_Proveedores">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="contrasena" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_Documentos_TipoDocumento">
-          <End Role="TipoDocumento" Type="Self.TipoDocumento" Multiplicity="1" />
-          <End Role="Documentos" Type="Self.Documentos" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TipoDocumento">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Documentos">
-              <PropertyRef Name="idTipoDocumento" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Proveedores_Validacion_Proveedores">
-          <End Role="Proveedores" Type="Self.Proveedores" Multiplicity="1" />
-          <End Role="Proveedores_Validacion" Type="Self.Proveedores_Validacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Proveedores">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Proveedores_Validacion">
-              <PropertyRef Name="idProveedor" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ProveedoresEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Documentos" EntityType="Self.Documentos" />
-          <EntitySet Name="Proveedores" EntityType="Self.Proveedores" />
-          <EntitySet Name="Proveedores_Validacion" EntityType="Self.Proveedores_Validacion" />
-          <EntitySet Name="Refrendos" EntityType="Self.Refrendos" />
-          <EntitySet Name="TipoDocumento" EntityType="Self.TipoDocumento" />
-          <EntitySet Name="Usuarios_Proveedores" EntityType="Self.Usuarios_Proveedores" />
-          <AssociationSet Name="FK_Documentos_TipoDocumento" Association="Self.FK_Documentos_TipoDocumento">
-            <End Role="TipoDocumento" EntitySet="TipoDocumento" />
-            <End Role="Documentos" EntitySet="Documentos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Proveedores_Validacion_Proveedores" Association="Self.FK_Proveedores_Validacion_Proveedores">
-            <End Role="Proveedores" EntitySet="Proveedores" />
-            <End Role="Proveedores_Validacion" EntitySet="Proveedores_Validacion" />
-          </AssociationSet>
           <FunctionImport Name="csp_buscar_provedor_RFC" ReturnType="Collection(ProveedoresModel.csp_buscar_provedor_RFC_Result)">
             <Parameter Name="RFC" Mode="In" Type="String" />
             <Parameter Name="numProveedor" Mode="In" Type="Int32" />
@@ -708,20 +715,20 @@
             <Parameter Name="contrasena" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="csp_Obtiene_usuario">
-            <Parameter Name="id" Mode="In" Type="Int64" />
+          <Parameter Name="id" Mode="In" Type="Int64" />
           </FunctionImport>
           <FunctionImport Name="csp_Proveedores_Buscar" ReturnType="Collection(ProveedoresModel.csp_Proveedores_Buscar_Result)">
-            <Parameter Name="Cadena" Mode="In" Type="String" />
+          <Parameter Name="Cadena" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="csp_Proveedores_List" ReturnType="Collection(ProveedoresModel.csp_Proveedores_List_Result)" />
           <FunctionImport Name="csp_Proveedores_Sel" ReturnType="Collection(ProveedoresModel.csp_Proveedores_Sel_Result)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="csp_TEJAV_Proveedores_Sel" ReturnType="Collection(ProveedoresModel.csp_TEJAV_Proveedores_Sel_Result)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="csp_TEJAV_Proveedores_Sel_Oficio" ReturnType="Collection(ProveedoresModel.csp_TEJAV_Proveedores_Sel_Oficio_Result)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_BOLeliminaBoletinL">
             <Parameter Name="IdBoletin" Mode="In" Type="Int32" />
@@ -812,13 +819,13 @@
             <Parameter Name="Sala" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_BOLObtieneBoletinL">
-            <Parameter Name="IdBoletin" Mode="In" Type="Int32" />
+          <Parameter Name="IdBoletin" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_BOLObtieneBoletinLS">
-            <Parameter Name="IdBoletin" Mode="In" Type="Int32" />
+          <Parameter Name="IdBoletin" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_BOLObtieneLista">
-            <Parameter Name="IdLista" Mode="In" Type="Int32" />
+          <Parameter Name="IdLista" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_BOLObtieneListaBusqueda">
             <Parameter Name="Expediente" Mode="In" Type="String" />
@@ -833,7 +840,7 @@
             <Parameter Name="Sala" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_consultaLista">
-            <Parameter Name="jca" Mode="In" Type="String" />
+          <Parameter Name="jca" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_EliminaAbogado">
             <Parameter Name="IdAbogado" Mode="In" Type="Int32" />
@@ -872,7 +879,7 @@
             <Parameter Name="estado_sp" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ImprimeNotificacion">
-            <Parameter Name="IdNotificacion" Mode="In" Type="Int32" />
+          <Parameter Name="IdNotificacion" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_InsertaActualizaAbogado">
             <Parameter Name="IdAbogado" Mode="In" Type="Int32" />
@@ -977,10 +984,10 @@
             <Parameter Name="estado_sp" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenFolio">
-            <Parameter Name="sala" Mode="In" Type="Int32" />
+          <Parameter Name="sala" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtieneAbogado">
-            <Parameter Name="IdAbogado" Mode="In" Type="Int32" />
+          <Parameter Name="IdAbogado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtieneAmparo">
             <Parameter Name="IdAmparo" Mode="In" Type="Int32" />
@@ -1008,7 +1015,7 @@
             <Parameter Name="IdNotificacion" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtieneRegistroCalendario">
-            <Parameter Name="IdRegistroCalendario" Mode="In" Type="Int32" />
+          <Parameter Name="IdRegistroCalendario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtieneRegistroCalendarioFechas">
             <Parameter Name="JCA" Mode="In" Type="String" />
@@ -1022,7 +1029,7 @@
             <Parameter Name="Sala" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtieneUsuario">
-            <Parameter Name="Usuario" Mode="In" Type="String" />
+          <Parameter Name="Usuario" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_SS_actualizaSentencias">
             <Parameter Name="IdSentencia" Mode="In" Type="Int32" />
@@ -1106,16 +1113,61 @@
             <Parameter Name="idSala" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_SS_ObtieneSentenciasSup">
-            <Parameter Name="IdSentencia" Mode="In" Type="Int32" />
+          <Parameter Name="IdSentencia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_VerificaAbogado">
             <Parameter Name="Email" Mode="In" Type="String" />
             <Parameter Name="Cedula" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="csp_TEJAV_Proveedores_Sel_Oficio1" ReturnType="Collection(ProveedoresModel.csp_TEJAV_Proveedores_Sel_Oficio1_Result)">
-            <Parameter Name="id" Mode="In" Type="Int32" />
+          <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
-        </EntityContainer>
+          <EntitySet Name="Cat_TipoDocumento" EntityType="ProveedoresModel.Cat_TipoDocumento" />
+          <EntitySet Name="Cat_TipoPersona" EntityType="ProveedoresModel.Cat_TipoPersona" />
+          <EntitySet Name="Cat_TipoTramite" EntityType="ProveedoresModel.Cat_TipoTramite" />
+          <EntitySet Name="Documentos_Proveedor" EntityType="ProveedoresModel.Documentos_Proveedor" />
+          <EntitySet Name="Proveedores_Validacion" EntityType="ProveedoresModel.Proveedores_Validacion" />
+          <EntitySet Name="Refrendos" EntityType="ProveedoresModel.Refrendos" />
+          <EntitySet Name="Requisitos_Tramite" EntityType="ProveedoresModel.Requisitos_Tramite" />
+          <EntitySet Name="Usuarios_Proveedores" EntityType="ProveedoresModel.Usuarios_Proveedores" />
+          <AssociationSet Name="FK_Doc_TipoDocumento" Association="ProveedoresModel.FK_Doc_TipoDocumento">
+            <End Role="Cat_TipoDocumento" EntitySet="Cat_TipoDocumento" />
+            <End Role="Documentos_Proveedor" EntitySet="Documentos_Proveedor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisitos_TipoDocumento" Association="ProveedoresModel.FK_Requisitos_TipoDocumento">
+            <End Role="Cat_TipoDocumento" EntitySet="Cat_TipoDocumento" />
+            <End Role="Requisitos_Tramite" EntitySet="Requisitos_Tramite" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisitos_TipoPersona" Association="ProveedoresModel.FK_Requisitos_TipoPersona">
+            <End Role="Cat_TipoPersona" EntitySet="Cat_TipoPersona" />
+            <End Role="Requisitos_Tramite" EntitySet="Requisitos_Tramite" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Doc_TipoTramite" Association="ProveedoresModel.FK_Doc_TipoTramite">
+            <End Role="Cat_TipoTramite" EntitySet="Cat_TipoTramite" />
+            <End Role="Documentos_Proveedor" EntitySet="Documentos_Proveedor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisitos_TipoTramite" Association="ProveedoresModel.FK_Requisitos_TipoTramite">
+            <End Role="Cat_TipoTramite" EntitySet="Cat_TipoTramite" />
+            <End Role="Requisitos_Tramite" EntitySet="Requisitos_Tramite" />
+          </AssociationSet>
+          <EntitySet Name="Proveedores" EntityType="ProveedoresModel.Proveedores" />
+          <AssociationSet Name="FK_Proveedor_TipoPersona" Association="ProveedoresModel.FK_Proveedor_TipoPersona">
+            <End Role="Cat_TipoPersona" EntitySet="Cat_TipoPersona" />
+            <End Role="Proveedores" EntitySet="Proveedores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Proveedor_TipoTramite" Association="ProveedoresModel.FK_Proveedor_TipoTramite">
+            <End Role="Cat_TipoTramite" EntitySet="Cat_TipoTramite" />
+            <End Role="Proveedores" EntitySet="Proveedores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Doc_Proveedor" Association="ProveedoresModel.FK_Doc_Proveedor">
+            <End Role="Proveedores" EntitySet="Proveedores" />
+            <End Role="Documentos_Proveedor" EntitySet="Documentos_Proveedor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Proveedores_Validacion_Proveedores" Association="ProveedoresModel.FK_Proveedores_Validacion_Proveedores">
+            <End Role="Proveedores" EntitySet="Proveedores" />
+            <End Role="Proveedores_Validacion" EntitySet="Proveedores_Validacion" />
+          </AssociationSet>
+          </EntityContainer>
         <ComplexType Name="csp_buscar_provedor_RFC_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Razon_Social" Nullable="false" />
@@ -1435,109 +1487,255 @@
           <Property Type="DateTime" Name="Fecha_Aceptacion" Nullable="true" Precision="23" />
           <Property Type="String" Name="Num_Proveedor" Nullable="true" MaxLength="11" />
         </ComplexType>
-      </Schema>
+        <EntityType Name="Cat_TipoDocumento">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Documentos_Proveedor" Relationship="ProveedoresModel.FK_Doc_TipoDocumento" FromRole="Cat_TipoDocumento" ToRole="Documentos_Proveedor" />
+          <NavigationProperty Name="Requisitos_Tramite" Relationship="ProveedoresModel.FK_Requisitos_TipoDocumento" FromRole="Cat_TipoDocumento" ToRole="Requisitos_Tramite" />
+        </EntityType>
+        <EntityType Name="Cat_TipoPersona">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Requisitos_Tramite" Relationship="ProveedoresModel.FK_Requisitos_TipoPersona" FromRole="Cat_TipoPersona" ToRole="Requisitos_Tramite" />
+          <NavigationProperty Name="Proveedores" Relationship="ProveedoresModel.FK_Proveedor_TipoPersona" FromRole="Cat_TipoPersona" ToRole="Proveedores" />
+        </EntityType>
+        <EntityType Name="Cat_TipoTramite">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Documentos_Proveedor" Relationship="ProveedoresModel.FK_Doc_TipoTramite" FromRole="Cat_TipoTramite" ToRole="Documentos_Proveedor" />
+          <NavigationProperty Name="Requisitos_Tramite" Relationship="ProveedoresModel.FK_Requisitos_TipoTramite" FromRole="Cat_TipoTramite" ToRole="Requisitos_Tramite" />
+          <NavigationProperty Name="Proveedores" Relationship="ProveedoresModel.FK_Proveedor_TipoTramite" FromRole="Cat_TipoTramite" ToRole="Proveedores" />
+        </EntityType>
+        <EntityType Name="Documentos_Proveedor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdProveedor" Type="Int32" Nullable="false" />
+          <Property Name="IdTipoDocumento" Type="Int32" Nullable="false" />
+          <Property Name="IdTipoTramite" Type="Int32" Nullable="false" />
+          <Property Name="RutaArchivo" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="FechaCarga" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Validado" Type="Boolean" />
+          <Property Name="Observaciones" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Cat_TipoDocumento" Relationship="ProveedoresModel.FK_Doc_TipoDocumento" FromRole="Documentos_Proveedor" ToRole="Cat_TipoDocumento" />
+          <NavigationProperty Name="Cat_TipoTramite" Relationship="ProveedoresModel.FK_Doc_TipoTramite" FromRole="Documentos_Proveedor" ToRole="Cat_TipoTramite" />
+          <NavigationProperty Name="Proveedores" Relationship="ProveedoresModel.FK_Doc_Proveedor" FromRole="Documentos_Proveedor" ToRole="Proveedores" />
+        </EntityType>
+        <EntityType Name="Proveedores_Validacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idProveedor" Type="Int32" Nullable="false" />
+          <Property Name="anio" Type="Int32" Nullable="false" />
+          <Property Name="fecha_renovacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fecha_validacion" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Proveedores" Relationship="ProveedoresModel.FK_Proveedores_Validacion_Proveedores" FromRole="Proveedores_Validacion" ToRole="Proveedores" />
+        </EntityType>
+        <EntityType Name="Refrendos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idProveedor" Type="Int32" Nullable="false" />
+          <Property Name="anio" Type="Int32" Nullable="false" />
+          <Property Name="fechaSolicitud" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fechaResolucion" Type="DateTime" Precision="3" />
+          <Property Name="Estatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Requisitos_Tramite">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdTipoTramite" Type="Int32" Nullable="false" />
+          <Property Name="IdTipoPersona" Type="Int32" Nullable="false" />
+          <Property Name="IdTipoDocumento" Type="Int32" Nullable="false" />
+          <Property Name="Obligatorio" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Cat_TipoDocumento" Relationship="ProveedoresModel.FK_Requisitos_TipoDocumento" FromRole="Requisitos_Tramite" ToRole="Cat_TipoDocumento" />
+          <NavigationProperty Name="Cat_TipoPersona" Relationship="ProveedoresModel.FK_Requisitos_TipoPersona" FromRole="Requisitos_Tramite" ToRole="Cat_TipoPersona" />
+          <NavigationProperty Name="Cat_TipoTramite" Relationship="ProveedoresModel.FK_Requisitos_TipoTramite" FromRole="Requisitos_Tramite" ToRole="Cat_TipoTramite" />
+        </EntityType>
+        <EntityType Name="Usuarios_Proveedores">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="usuario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="contrasena" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_Doc_TipoDocumento">
+          <End Type="ProveedoresModel.Cat_TipoDocumento" Role="Cat_TipoDocumento" Multiplicity="1" />
+          <End Type="ProveedoresModel.Documentos_Proveedor" Role="Documentos_Proveedor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoDocumento">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Documentos_Proveedor">
+              <PropertyRef Name="IdTipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisitos_TipoDocumento">
+          <End Type="ProveedoresModel.Cat_TipoDocumento" Role="Cat_TipoDocumento" Multiplicity="1" />
+          <End Type="ProveedoresModel.Requisitos_Tramite" Role="Requisitos_Tramite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoDocumento">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Requisitos_Tramite">
+              <PropertyRef Name="IdTipoDocumento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisitos_TipoPersona">
+          <End Type="ProveedoresModel.Cat_TipoPersona" Role="Cat_TipoPersona" Multiplicity="1" />
+          <End Type="ProveedoresModel.Requisitos_Tramite" Role="Requisitos_Tramite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoPersona">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Requisitos_Tramite">
+              <PropertyRef Name="IdTipoPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Doc_TipoTramite">
+          <End Type="ProveedoresModel.Cat_TipoTramite" Role="Cat_TipoTramite" Multiplicity="1" />
+          <End Type="ProveedoresModel.Documentos_Proveedor" Role="Documentos_Proveedor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoTramite">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Documentos_Proveedor">
+              <PropertyRef Name="IdTipoTramite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisitos_TipoTramite">
+          <End Type="ProveedoresModel.Cat_TipoTramite" Role="Cat_TipoTramite" Multiplicity="1" />
+          <End Type="ProveedoresModel.Requisitos_Tramite" Role="Requisitos_Tramite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoTramite">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Requisitos_Tramite">
+              <PropertyRef Name="IdTipoTramite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Proveedores">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Razon_Social" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RFC" Type="String" Nullable="false" MaxLength="14" FixedLength="false" Unicode="false" />
+          <Property Name="CURP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Calle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Colonia" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="No_Exterior" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="No_Interior" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="Codigo_Postal" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Localidad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Municipio" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Estado" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Pagina_Web" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Estratificacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Giro_Comercial" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Extension" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Correo_E" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Numero_Acta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Numero_Poder" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Notario_Notaria" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Personal_Tramite" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Tra_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Tra_Extension" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Tra_Correo_E" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Ban_Banco" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Ban_Cuenta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Ban_Sucursal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Ban_Clabe" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Solicitud" Type="DateTime" Precision="0" />
+          <Property Name="Fecha_Aceptacion" Type="DateTime" Precision="3" />
+          <Property Name="IdTipoPersona" Type="Int32" />
+          <Property Name="IdTipoTramite" Type="Int32" />
+          <Property Name="Fecha_Alta" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Cat_TipoPersona" Relationship="ProveedoresModel.FK_Proveedor_TipoPersona" FromRole="Proveedores" ToRole="Cat_TipoPersona" />
+          <NavigationProperty Name="Cat_TipoTramite" Relationship="ProveedoresModel.FK_Proveedor_TipoTramite" FromRole="Proveedores" ToRole="Cat_TipoTramite" />
+          <NavigationProperty Name="Documentos_Proveedor" Relationship="ProveedoresModel.FK_Doc_Proveedor" FromRole="Proveedores" ToRole="Documentos_Proveedor" />
+          <NavigationProperty Name="Proveedores_Validacion" Relationship="ProveedoresModel.FK_Proveedores_Validacion_Proveedores" FromRole="Proveedores" ToRole="Proveedores_Validacion" />
+        </EntityType>
+        <Association Name="FK_Proveedor_TipoPersona">
+          <End Type="ProveedoresModel.Cat_TipoPersona" Role="Cat_TipoPersona" Multiplicity="0..1" />
+          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoPersona">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Proveedores">
+              <PropertyRef Name="IdTipoPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Proveedor_TipoTramite">
+          <End Type="ProveedoresModel.Cat_TipoTramite" Role="Cat_TipoTramite" Multiplicity="0..1" />
+          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoTramite">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Proveedores">
+              <PropertyRef Name="IdTipoTramite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Doc_Proveedor">
+          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="1" />
+          <End Type="ProveedoresModel.Documentos_Proveedor" Role="Documentos_Proveedor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedores">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Documentos_Proveedor">
+              <PropertyRef Name="IdProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Proveedores_Validacion_Proveedores">
+          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="1" />
+          <End Type="ProveedoresModel.Proveedores_Validacion" Role="Proveedores_Validacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedores">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Proveedores_Validacion">
+              <PropertyRef Name="idProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ProveedoresModelStoreContainer" CdmEntityContainer="ProveedoresEntities">
-          <EntitySetMapping Name="Documentos">
-            <EntityTypeMapping TypeName="ProveedoresModel.Documentos">
-              <MappingFragment StoreEntitySet="Documentos">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="idTipoDocumento" ColumnName="idTipoDocumento" />
-                <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
-                <ScalarProperty Name="rutaRelativa" ColumnName="rutaRelativa" />
-                <ScalarProperty Name="fechaAlta" ColumnName="fechaAlta" />
-                <ScalarProperty Name="fechaBaja" ColumnName="fechaBaja" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Proveedores">
-            <EntityTypeMapping TypeName="ProveedoresModel.Proveedores">
-              <MappingFragment StoreEntitySet="Proveedores">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Razon_Social" ColumnName="Razon_Social" />
-                <ScalarProperty Name="RFC" ColumnName="RFC" />
-                <ScalarProperty Name="CURP" ColumnName="CURP" />
-                <ScalarProperty Name="Calle" ColumnName="Calle" />
-                <ScalarProperty Name="Colonia" ColumnName="Colonia" />
-                <ScalarProperty Name="No_Exterior" ColumnName="No_Exterior" />
-                <ScalarProperty Name="No_Interior" ColumnName="No_Interior" />
-                <ScalarProperty Name="Codigo_Postal" ColumnName="Codigo_Postal" />
-                <ScalarProperty Name="Localidad" ColumnName="Localidad" />
-                <ScalarProperty Name="Municipio" ColumnName="Municipio" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="Pagina_Web" ColumnName="Pagina_Web" />
-                <ScalarProperty Name="Estratificacion" ColumnName="Estratificacion" />
-                <ScalarProperty Name="Giro_Comercial" ColumnName="Giro_Comercial" />
-                <ScalarProperty Name="Rep_Nombre" ColumnName="Rep_Nombre" />
-                <ScalarProperty Name="Rep_Telefono" ColumnName="Rep_Telefono" />
-                <ScalarProperty Name="Rep_Extension" ColumnName="Rep_Extension" />
-                <ScalarProperty Name="Rep_Correo_E" ColumnName="Rep_Correo_E" />
-                <ScalarProperty Name="Rep_Numero_Acta" ColumnName="Rep_Numero_Acta" />
-                <ScalarProperty Name="Rep_Numero_Poder" ColumnName="Rep_Numero_Poder" />
-                <ScalarProperty Name="Rep_Notario_Notaria" ColumnName="Rep_Notario_Notaria" />
-                <ScalarProperty Name="Rep_Personal_Tramite" ColumnName="Rep_Personal_Tramite" />
-                <ScalarProperty Name="Tra_Telefono" ColumnName="Tra_Telefono" />
-                <ScalarProperty Name="Tra_Extension" ColumnName="Tra_Extension" />
-                <ScalarProperty Name="Tra_Correo_E" ColumnName="Tra_Correo_E" />
-                <ScalarProperty Name="Ban_Banco" ColumnName="Ban_Banco" />
-                <ScalarProperty Name="Ban_Cuenta" ColumnName="Ban_Cuenta" />
-                <ScalarProperty Name="Ban_Sucursal" ColumnName="Ban_Sucursal" />
-                <ScalarProperty Name="Ban_Clabe" ColumnName="Ban_Clabe" />
-                <ScalarProperty Name="Fecha_Solicitud" ColumnName="Fecha_Solicitud" />
-                <ScalarProperty Name="Persona_Moral" ColumnName="Persona_Moral" />
-                <ScalarProperty Name="Persona_Fisica" ColumnName="Persona_Fisica" />
-                <ScalarProperty Name="Alta" ColumnName="Alta" />
-                <ScalarProperty Name="Modificacion" ColumnName="Modificacion" />
-                <ScalarProperty Name="Renovacion" ColumnName="Renovacion" />
-                <ScalarProperty Name="Fecha_Aceptacion" ColumnName="Fecha_Aceptacion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Proveedores_Validacion">
-            <EntityTypeMapping TypeName="ProveedoresModel.Proveedores_Validacion">
-              <MappingFragment StoreEntitySet="Proveedores_Validacion">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
-                <ScalarProperty Name="anio" ColumnName="anio" />
-                <ScalarProperty Name="fecha_renovacion" ColumnName="fecha_renovacion" />
-                <ScalarProperty Name="fecha_validacion" ColumnName="fecha_validacion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Refrendos">
-            <EntityTypeMapping TypeName="ProveedoresModel.Refrendos">
-              <MappingFragment StoreEntitySet="Refrendos">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
-                <ScalarProperty Name="anio" ColumnName="anio" />
-                <ScalarProperty Name="fechaSolicitud" ColumnName="fechaSolicitud" />
-                <ScalarProperty Name="fechaResolucion" ColumnName="fechaResolucion" />
-                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TipoDocumento">
-            <EntityTypeMapping TypeName="ProveedoresModel.TipoDocumento">
-              <MappingFragment StoreEntitySet="TipoDocumento">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="tipoDocumento1" ColumnName="tipoDocumento" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Usuarios_Proveedores">
-            <EntityTypeMapping TypeName="ProveedoresModel.Usuarios_Proveedores">
-              <MappingFragment StoreEntitySet="Usuarios_Proveedores">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="usuario" ColumnName="usuario" />
-                <ScalarProperty Name="contrasena" ColumnName="contrasena" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="csp_buscar_provedor_RFC" FunctionName="ProveedoresModel.Store.csp_buscar_provedor_RFC">
             <ResultMapping>
               <ComplexTypeMapping TypeName="ProveedoresModel.csp_buscar_provedor_RFC_Result">
@@ -1951,7 +2149,133 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="Cat_TipoDocumento">
+            <EntityTypeMapping TypeName="ProveedoresModel.Cat_TipoDocumento">
+              <MappingFragment StoreEntitySet="Cat_TipoDocumento">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cat_TipoPersona">
+            <EntityTypeMapping TypeName="ProveedoresModel.Cat_TipoPersona">
+              <MappingFragment StoreEntitySet="Cat_TipoPersona">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cat_TipoTramite">
+            <EntityTypeMapping TypeName="ProveedoresModel.Cat_TipoTramite">
+              <MappingFragment StoreEntitySet="Cat_TipoTramite">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Documentos_Proveedor">
+            <EntityTypeMapping TypeName="ProveedoresModel.Documentos_Proveedor">
+              <MappingFragment StoreEntitySet="Documentos_Proveedor">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="Validado" ColumnName="Validado" />
+                <ScalarProperty Name="FechaCarga" ColumnName="FechaCarga" />
+                <ScalarProperty Name="RutaArchivo" ColumnName="RutaArchivo" />
+                <ScalarProperty Name="IdTipoTramite" ColumnName="IdTipoTramite" />
+                <ScalarProperty Name="IdTipoDocumento" ColumnName="IdTipoDocumento" />
+                <ScalarProperty Name="IdProveedor" ColumnName="IdProveedor" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proveedores_Validacion">
+            <EntityTypeMapping TypeName="ProveedoresModel.Proveedores_Validacion">
+              <MappingFragment StoreEntitySet="Proveedores_Validacion">
+                <ScalarProperty Name="fecha_validacion" ColumnName="fecha_validacion" />
+                <ScalarProperty Name="fecha_renovacion" ColumnName="fecha_renovacion" />
+                <ScalarProperty Name="anio" ColumnName="anio" />
+                <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Refrendos">
+            <EntityTypeMapping TypeName="ProveedoresModel.Refrendos">
+              <MappingFragment StoreEntitySet="Refrendos">
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+                <ScalarProperty Name="fechaResolucion" ColumnName="fechaResolucion" />
+                <ScalarProperty Name="fechaSolicitud" ColumnName="fechaSolicitud" />
+                <ScalarProperty Name="anio" ColumnName="anio" />
+                <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Requisitos_Tramite">
+            <EntityTypeMapping TypeName="ProveedoresModel.Requisitos_Tramite">
+              <MappingFragment StoreEntitySet="Requisitos_Tramite">
+                <ScalarProperty Name="Obligatorio" ColumnName="Obligatorio" />
+                <ScalarProperty Name="IdTipoDocumento" ColumnName="IdTipoDocumento" />
+                <ScalarProperty Name="IdTipoPersona" ColumnName="IdTipoPersona" />
+                <ScalarProperty Name="IdTipoTramite" ColumnName="IdTipoTramite" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios_Proveedores">
+            <EntityTypeMapping TypeName="ProveedoresModel.Usuarios_Proveedores">
+              <MappingFragment StoreEntitySet="Usuarios_Proveedores">
+                <ScalarProperty Name="contrasena" ColumnName="contrasena" />
+                <ScalarProperty Name="usuario" ColumnName="usuario" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proveedores">
+            <EntityTypeMapping TypeName="ProveedoresModel.Proveedores">
+              <MappingFragment StoreEntitySet="Proveedores">
+                <ScalarProperty Name="Fecha_Alta" ColumnName="Fecha_Alta" />
+                <ScalarProperty Name="IdTipoTramite" ColumnName="IdTipoTramite" />
+                <ScalarProperty Name="IdTipoPersona" ColumnName="IdTipoPersona" />
+                <ScalarProperty Name="Fecha_Aceptacion" ColumnName="Fecha_Aceptacion" />
+                <ScalarProperty Name="Fecha_Solicitud" ColumnName="Fecha_Solicitud" />
+                <ScalarProperty Name="Ban_Clabe" ColumnName="Ban_Clabe" />
+                <ScalarProperty Name="Ban_Sucursal" ColumnName="Ban_Sucursal" />
+                <ScalarProperty Name="Ban_Cuenta" ColumnName="Ban_Cuenta" />
+                <ScalarProperty Name="Ban_Banco" ColumnName="Ban_Banco" />
+                <ScalarProperty Name="Tra_Correo_E" ColumnName="Tra_Correo_E" />
+                <ScalarProperty Name="Tra_Extension" ColumnName="Tra_Extension" />
+                <ScalarProperty Name="Tra_Telefono" ColumnName="Tra_Telefono" />
+                <ScalarProperty Name="Rep_Personal_Tramite" ColumnName="Rep_Personal_Tramite" />
+                <ScalarProperty Name="Rep_Notario_Notaria" ColumnName="Rep_Notario_Notaria" />
+                <ScalarProperty Name="Rep_Numero_Poder" ColumnName="Rep_Numero_Poder" />
+                <ScalarProperty Name="Rep_Numero_Acta" ColumnName="Rep_Numero_Acta" />
+                <ScalarProperty Name="Rep_Correo_E" ColumnName="Rep_Correo_E" />
+                <ScalarProperty Name="Rep_Extension" ColumnName="Rep_Extension" />
+                <ScalarProperty Name="Rep_Telefono" ColumnName="Rep_Telefono" />
+                <ScalarProperty Name="Rep_Nombre" ColumnName="Rep_Nombre" />
+                <ScalarProperty Name="Giro_Comercial" ColumnName="Giro_Comercial" />
+                <ScalarProperty Name="Estratificacion" ColumnName="Estratificacion" />
+                <ScalarProperty Name="Pagina_Web" ColumnName="Pagina_Web" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Municipio" ColumnName="Municipio" />
+                <ScalarProperty Name="Localidad" ColumnName="Localidad" />
+                <ScalarProperty Name="Codigo_Postal" ColumnName="Codigo_Postal" />
+                <ScalarProperty Name="No_Interior" ColumnName="No_Interior" />
+                <ScalarProperty Name="No_Exterior" ColumnName="No_Exterior" />
+                <ScalarProperty Name="Colonia" ColumnName="Colonia" />
+                <ScalarProperty Name="Calle" ColumnName="Calle" />
+                <ScalarProperty Name="CURP" ColumnName="CURP" />
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="Razon_Social" ColumnName="Razon_Social" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
