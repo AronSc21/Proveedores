@@ -1,0 +1,63 @@
+﻿@using Proveedores
+@model List<Proveedores>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Lista de Proveedores";
+}
+
+<div class="container" style="margin-top:40px;">
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <h3>Padrón de Proveedores</h3>
+            <hr />
+
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>No. Proveedor</th>
+                        <th>RFC</th>
+                        <th>CURP</th>
+                        <th>Razón Social</th>
+                        <th>Giro Comercial</th>
+                        <th>Tipo Persona</th>
+                        <th>Datos Generales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td>
+                                TRIJAEV-@p.Id
+                            </td>
+                            <td>@p.RFC</td>
+                            <td>@p.CURP</td>
+                            <td>@p.Razon_Social</td>
+                            <td>@p.Giro_Comercial</td>
+                            <td>
+                                @(p.IdTipoPersona == 1 ? "Física" : "Moral")
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Datos", "Login", new { id = p.Id })"
+                                   class="btn btn-info btn-sm">
+                                    Ver
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-right">
+                <a href="@Url.Action("Logout", "Login")" class="btn btn-danger">
+                    Cerrar sesión
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>

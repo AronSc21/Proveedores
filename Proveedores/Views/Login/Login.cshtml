@@ -1,0 +1,66 @@
+﻿@using Proveedores
+@model Usuarios_Proveedores
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Login";
+}
+
+<div class="container">
+    <div class="row justify-content-center" style="margin-top:80px;">
+        <div class="col-md-4">
+
+            <div class="card shadow">
+                <div class="card-header text-center bg-primary text-white">
+                    <h4>Lista de Proveedores</h4>
+                </div>
+
+                <div class="card-body">
+
+                    @if (!String.IsNullOrEmpty(ViewBag.Error))
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> @ViewBag.Error
+                        </div>
+                    }
+
+                    <form method="post">
+
+                        <div class="form-group">
+                            <label>Usuario</label>
+                            <input type="text"
+                                   class="form-control"
+                                   name="usuario"
+                                   placeholder="Nombre de usuario"
+                                   required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="password"
+                                   class="form-control"
+                                   name="contrasena"
+                                   placeholder="Contraseña"
+                                   required />
+                        </div>
+
+                        <br />
+
+                        <div class="text-center">
+                            <button type="reset" class="btn btn-secondary">
+                                Cancelar
+                            </button>
+
+                            <button type="submit" class="btn btn-success">
+                                Entrar
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

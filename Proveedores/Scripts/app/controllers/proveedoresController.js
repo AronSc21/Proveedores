@@ -1,12 +1,10 @@
 ﻿    app.controller('proveedoresController', function ($scope, $http) {
 
-        /* ======================================================
-           1. MODELO DEL PROVEEDOR
-        ====================================================== */
+        /* 1. MODELO DEL PROVEEDOR */
 
         $scope.proveedor = {
 
-            IdTipoPersona: null, // 1 = Física, 2 = Moral
+            IdTipoPersona: null, 
 
             // Datos generales
             Razon_Social: '',
@@ -48,9 +46,7 @@
         };
 
 
-        /* ======================================================
-           2. SELECCIÓN DE TIPO DE PERSONA
-        ====================================================== */
+        /* 2. SELECCIÓN DE TIPO DE PERSONA */
 
         $scope.seleccionarPersona = function (tipo) {
             if (tipo === 'F') {
@@ -62,9 +58,7 @@
         };
 
 
-        /* ======================================================
-           3. DOCUMENTOS
-        ====================================================== */
+        /* 3. DOCUMENTOS */
 
         $scope.documentos = [];
 
@@ -72,7 +66,7 @@
 
             if (!archivo) return;
 
-            // Validación PDF
+            
             if (archivo.type !== 'application/pdf') {
                 alert('Solo se permiten archivos PDF');
                 return;
@@ -83,15 +77,13 @@
                 idTipoDocumento: idTipoDocumento
             });
 
-            // Angular no detecta onchange automáticamente
+            
             $scope.$applyAsync();
         };
 
 
 
-        /* ======================================================
-           4. GUARDAR TODO
-        ====================================================== */
+        /* 4. GUARDAR TODO */
 
         $scope.guardarTodo = function () {
 
@@ -100,7 +92,7 @@
                 return;
             }
 
-            // 1️⃣ Guardar proveedor
+            
             $http.post('/Proveedores/GuardarProveedor', $scope.proveedor)
                 .then(function (response) {
 
@@ -111,13 +103,13 @@
 
                     var proveedorId = response.data.proveedorId;
 
-                    // 2️⃣ Validar documentos
+                    
                     if ($scope.documentos.length === 0) {
                         alert('Debe adjuntar al menos un documento');
                         throw 'Sin documentos';
                     }
 
-                    // 3️⃣ Preparar FormData
+                    
                     var formData = new FormData();
                     formData.append('proveedorId', proveedorId);
                     formData.append('idTipoTramite', 1);
@@ -127,7 +119,7 @@
                         formData.append('tipos', doc.idTipoDocumento);
                     });
 
-                    // 4️⃣ Subir documentos
+                    
                     return $http.post('/Documentos/SubirDocumentosMasivo', formData, {
                         transformRequest: angular.identity,
                         headers: { 'Content-Type': undefined }
@@ -149,9 +141,7 @@
 
 
 
-        /* ======================================================
-           5. LIMPIAR FORMULARIO
-        ====================================================== */
+        /* 5. LIMPIAR FORMULARIO*/
 
         $scope.limpiarFormulario = function () {
 

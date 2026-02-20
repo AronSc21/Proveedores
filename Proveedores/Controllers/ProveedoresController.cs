@@ -9,7 +9,7 @@ namespace Proveedores.Controllers
     public class ProveedoresController : Controller
     {
         private ProveedoresEntities db = new ProveedoresEntities();
-        // GET: Proveedores
+        
         [HttpGet]
         public ActionResult Registro()
         {

@@ -9,20 +9,26 @@
         <EntityTypeShape EntityType="ProveedoresModel.Cat_TipoPersona" Width="1.5" PointX="6.75" PointY="4.75" />
         <EntityTypeShape EntityType="ProveedoresModel.Cat_TipoTramite" Width="1.5" PointX="0.75" PointY="8.625" />
         <EntityTypeShape EntityType="ProveedoresModel.Documentos_Proveedor" Width="1.5" PointX="6" PointY="8" />
-        <EntityTypeShape EntityType="ProveedoresModel.Proveedores_Validacion" Width="1.5" PointX="11.25" PointY="8.625" />
         <EntityTypeShape EntityType="ProveedoresModel.Refrendos" Width="1.5" PointX="3.375" PointY="2" />
         <EntityTypeShape EntityType="ProveedoresModel.Requisitos_Tramite" Width="1.5" PointX="3" PointY="8.375" />
-        <EntityTypeShape EntityType="ProveedoresModel.Usuarios_Proveedores" Width="1.5" PointX="5.75" PointY="2" />
         <AssociationConnector Association="ProveedoresModel.FK_Doc_TipoDocumento" />
         <AssociationConnector Association="ProveedoresModel.FK_Requisitos_TipoDocumento" />
         <AssociationConnector Association="ProveedoresModel.FK_Requisitos_TipoPersona" />
         <AssociationConnector Association="ProveedoresModel.FK_Doc_TipoTramite" />
         <AssociationConnector Association="ProveedoresModel.FK_Requisitos_TipoTramite" />
-        <EntityTypeShape EntityType="ProveedoresModel.Proveedores" Width="1.5" PointX="9" PointY="3.25" />
+        <EntityTypeShape EntityType="ProveedoresModel.Permisos" Width="1.5" PointX="0.75" PointY="16.5" />
+        <EntityTypeShape EntityType="ProveedoresModel.Proveedores" Width="1.5" PointX="9.375" PointY="3.25" />
+        <EntityTypeShape EntityType="ProveedoresModel.Proveedores_Validacion" Width="1.5" PointX="11.625" PointY="6.625" />
+        <EntityTypeShape EntityType="ProveedoresModel.Roles" Width="1.5" PointX="0.75" PointY="13.5" />
+        <EntityTypeShape EntityType="ProveedoresModel.Roles_Permisos" Width="1.5" PointX="4" PointY="13.25" />
+        <EntityTypeShape EntityType="ProveedoresModel.Usuarios_Proveedores" Width="1.5" PointX="4.5" PointY="16.125" />
         <AssociationConnector Association="ProveedoresModel.FK_Proveedor_TipoPersona" />
         <AssociationConnector Association="ProveedoresModel.FK_Proveedor_TipoTramite" />
         <AssociationConnector Association="ProveedoresModel.FK_Doc_Proveedor" />
+        <AssociationConnector Association="ProveedoresModel.FK_Roles_Permisos_Permisos" />
         <AssociationConnector Association="ProveedoresModel.FK_Proveedores_Validacion_Proveedores" />
+        <AssociationConnector Association="ProveedoresModel.FK_Roles_Permisos_Roles" />
+        <AssociationConnector Association="ProveedoresModel.FK_Usuarios_Proveedores_Roles" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

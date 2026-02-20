@@ -36,7 +36,7 @@ namespace Proveedores.Controllers
                 for (int i = 0; i < listaArchivos.Count; i++)
                 {
                     var archivo = listaArchivos[i];
-                    var idTipoDocumento = listaTipos[i]; // ✅ YA EXISTE
+                    var idTipoDocumento = listaTipos[i]; 
 
                     if (archivo == null || archivo.ContentLength == 0)
                         continue;
@@ -52,7 +52,7 @@ namespace Proveedores.Controllers
                     var doc = new Documentos_Proveedor
                     {
                         IdProveedor = proveedorId,
-                        IdTipoDocumento = idTipoDocumento, // ✅ FK válida
+                        IdTipoDocumento = idTipoDocumento, 
                         IdTipoTramite = idTipoTramite,
                         RutaArchivo = $"DocumentosProveedores/{carpetaProveedor}/{nombreArchivo}",
                         FechaCarga = DateTime.Now,
@@ -90,11 +90,11 @@ namespace Proveedores.Controllers
                 if (archivo == null || archivo.ContentLength == 0)
                     return Json(new { success = false, message = "Archivo no válido" });
 
-                // ✔ SOLO PDF
+                
                 if (Path.GetExtension(archivo.FileName).ToLower() != ".pdf")
                     return Json(new { success = false, message = "Solo se permiten archivos PDF" });
 
-                // 📁 Carpeta: TRIJAEV-ID
+                
                 string carpetaProveedor = $"TRIJAEV-{proveedorId}";
                 string rutaBase = Server.MapPath("~/DocumentosProveedores/");
                 string rutaFinal = Path.Combine(rutaBase, carpetaProveedor);
@@ -107,7 +107,7 @@ namespace Proveedores.Controllers
 
                 archivo.SaveAs(rutaArchivo);
 
-                // 💾 Guardar en BDD
+                
                 var doc = new Documentos_Proveedor
                 {
                     IdProveedor = proveedorId,

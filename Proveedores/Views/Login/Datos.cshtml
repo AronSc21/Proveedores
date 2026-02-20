@@ -1,0 +1,203 @@
+﻿@using Proveedores
+@model Proveedores
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Datos del Proveedor";
+}
+
+<div class="container" style="margin-top:30px; margin-bottom:50px;">
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 style="text-align:center;">
+                DATOS GENERALES DEL PROVEEDOR
+            </h3>
+        </div>
+
+        <div class="panel-body">
+
+            <!-- ========================= -->
+            <!-- DATOS GENERALES -->
+            <!-- ========================= -->
+            <h4><strong>DATOS GENERALES</strong></h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>No. Proveedor</th>
+                    <td>TRIJAEV-@Model.Id</td>
+                </tr>
+                <tr>
+                    <th>Razón Social</th>
+                    <td>@Model.Razon_Social</td>
+                </tr>
+                <tr>
+                    <th>RFC</th>
+                    <td>@Model.RFC</td>
+                </tr>
+                <tr>
+                    <th>CURP</th>
+                    <td>@Model.CURP</td>
+                </tr>
+                <tr>
+                    <th>Giro Comercial</th>
+                    <td>@Model.Giro_Comercial</td>
+                </tr>
+                <tr>
+                    <th>Estratificación</th>
+                    <td>@Model.Estratificacion</td>
+                </tr>
+                <tr>
+                    <th>Fecha de Solicitud</th>
+                    <td>@Model.Fecha_Solicitud?.ToString("dd/MM/yyyy")</td>
+                </tr>
+            </table>
+
+            <hr />
+
+            <!-- ========================= -->
+            <!-- DOMICILIO -->
+            <!-- ========================= -->
+            <h4><strong>DOMICILIO</strong></h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Calle</th>
+                    <td>@Model.Calle</td>
+                </tr>
+                <tr>
+                    <th>Colonia</th>
+                    <td>@Model.Colonia</td>
+                </tr>
+                <tr>
+                    <th>No. Exterior</th>
+                    <td>@Model.No_Exterior</td>
+                </tr>
+                <tr>
+                    <th>No. Interior</th>
+                    <td>@Model.No_Interior</td>
+                </tr>
+                <tr>
+                    <th>Código Postal</th>
+                    <td>@Model.Codigo_Postal</td>
+                </tr>
+                <tr>
+                    <th>Localidad</th>
+                    <td>@Model.Localidad</td>
+                </tr>
+                <tr>
+                    <th>Municipio</th>
+                    <td>@Model.Municipio</td>
+                </tr>
+                <tr>
+                    <th>Estado</th>
+                    <td>@Model.Estado</td>
+                </tr>
+            </table>
+
+            <hr />
+
+            <!-- ========================= -->
+            <!-- DATOS DE CONTACTO -->
+            <!-- ========================= -->
+            <h4><strong>DATOS DE CONTACTO</strong></h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Teléfono</th>
+                    <td>@Model.Telefono</td>
+                </tr>
+                <tr>
+                    <th>Fax</th>
+                    <td>@Model.Fax</td>
+                </tr>
+                <tr>
+                    <th>Página Web</th>
+                    <td>@Model.Pagina_Web</td>
+                </tr>
+            </table>
+
+            <hr />
+
+            <!-- ========================= -->
+            <!-- REPRESENTANTE LEGAL -->
+            <!-- ========================= -->
+            <h4><strong>REPRESENTANTE LEGAL</strong></h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Nombre</th>
+                    <td>@Model.Rep_Nombre</td>
+                </tr>
+                <tr>
+                    <th>Teléfono</th>
+                    <td>@Model.Rep_Telefono</td>
+                </tr>
+                <tr>
+                    <th>Extensión</th>
+                    <td>@Model.Rep_Extension</td>
+                </tr>
+                <tr>
+                    <th>Correo electrónico</th>
+                    <td>@Model.Rep_Correo_E</td>
+                </tr>
+                <tr>
+                    <th>Número de Acta</th>
+                    <td>@Model.Rep_Numero_Acta</td>
+                </tr>
+                <tr>
+                    <th>Número de Poder</th>
+                    <td>@Model.Rep_Numero_Poder</td>
+                </tr>
+                <tr>
+                    <th>Notario/Notaría</th>
+                    <td>@Model.Rep_Notario_Notaria</td>
+                </tr>
+                <tr>
+                    <th>Personal designado para trámites</th>
+                    <td>@Model.Rep_Personal_Tramite</td>
+                </tr>
+                <tr>
+                    <th>Teléfono</th>
+                    <td>@Model.Tra_Telefono</td>
+                </tr>
+                <tr>
+                    <th>Extensión</th>
+                    <td>@Model.Tra_Extension</td>
+                </tr>
+                <tr>
+                    <th>Correo Electrónico</th>
+                    <td>@Model.Tra_Correo_E</td>
+                </tr>
+            </table>
+
+            <hr />
+
+            <!-- ========================= -->
+            <!-- DATOS BANCARIOS -->
+            <!-- ========================= -->
+            <h4><strong>DATOS BANCARIOS</strong></h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Banco</th>
+                    <td>@Model.Ban_Banco</td>
+                </tr>
+                <tr>
+                    <th>Cuenta</th>
+                    <td>@Model.Ban_Cuenta</td>
+                </tr>
+                <tr>
+                    <th>Sucursal</th>
+                    <td>@Model.Ban_Sucursal</td>
+                </tr>
+                <tr>
+                    <th>CLABE</th>
+                    <td>@Model.Ban_Clabe</td>
+                </tr>
+            </table>
+
+            <br />
+
+            <a href="@Url.Action("Lista","Login")" class="btn btn-default">
+                Regresar
+            </a>
+
+        </div>
+    </div>
+</div>
