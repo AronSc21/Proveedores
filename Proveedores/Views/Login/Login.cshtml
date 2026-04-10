@@ -5,14 +5,29 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Login";
 }
+<div class="encabezado-login">
+    <div class="encabezado-contenido">
+
+        <div class="logo">
+            <img src="~/Content/logo.jpeg" alt="Logo TRIJAEV" />
+        </div>
+
+        <div class="titulo">
+            <h2>Sistema de Padrón de Proveedores V 2.0</h2>
+            <p>Dirección de Administración</p>
+            <p>Subdirección de Recursos Materiales</p>
+        </div>
+
+    </div>
+</div>
 
 <div class="container">
-    <div class="row justify-content-center" style="margin-top:80px;">
+    <div class="row justify-content-center" style="margin-top:40px;">
         <div class="col-md-4">
 
             <div class="card shadow">
                 <div class="card-header text-center bg-primary text-white">
-                    <h4>Lista de Proveedores</h4>
+                    <h4 style="font-size: 30px;">Iniciar sesión</h4>
                 </div>
 
                 <div class="card-body">
@@ -48,7 +63,7 @@
 
                         <div class="text-center">
                             <button type="reset" class="btn btn-secondary">
-                                Cancelar
+                                Limpiar
                             </button>
 
                             <button type="submit" class="btn btn-success">

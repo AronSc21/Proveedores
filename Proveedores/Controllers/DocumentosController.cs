@@ -130,6 +130,26 @@ namespace Proveedores.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult VerDocumento(int id)
+        {
+            var doc = db.Documentos_Proveedor.Find(id);
+
+            if (doc == null || !doc.Activo)
+                return HttpNotFound();
+
+            string rutaFisica = Server.MapPath("~/" + doc.RutaArchivo);
+
+            if (!System.IO.File.Exists(rutaFisica))
+                return HttpNotFound();
+
+            byte[] bytes = System.IO.File.ReadAllBytes(rutaFisica);
+
+            return File(bytes, "application/pdf");
+        }
+
+
+
 
     }
 

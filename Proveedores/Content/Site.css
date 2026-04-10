@@ -18,3 +18,34 @@ select,
 textarea {
     max-width: 280px;
 }
+.encabezado-login {
+    width: 100%;
+    background-color: white;
+    padding: 20px 0;
+    border-bottom: 4px solid #8a7f5a; /* color tipo institucional */
+}
+
+.encabezado-contenido {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 70px;
+    margin-right: 20px;
+}
+
+.titulo h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+    color: #5a4a42;
+}
+
+.titulo p {
+    margin: 0;
+    font-size: 14px;
+    color: #6c757d;
+}

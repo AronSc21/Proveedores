@@ -10,10 +10,10 @@
         Solicitud de Registro al Padrón de Proveedores
     </h3>
 
-    <form>
+    <form name="formRegistro" novalidate>
 
 
-        <!-- ================= TIPO DE PERSONA ================= -->
+        <!-- TIPO DE PERSONA -->
         <div class="card mb-4">
             <div class="card-body">
                 <label class="font-weight-bold d-block mb-2">Tipo de persona</label>
@@ -46,140 +46,140 @@
 
 
 
-        <!-- ================= DATOS GENERALES ================= -->
+        <!-- DATOS GENERALES -->
         <div class="card mb-4 shadow-sm">
             <div class="card-header bg-light font-weight-bold">
                 Datos Generales
             </div>
             <div class="card-body">
 
-                <label>Razón Social *</label>
+                <label>Razón Social</label>
                 <input class="form-control mb-2"
-                       ng-model="proveedor.Razon_Social" required />
+                       ng-model="proveedor.Razon_Social" maxlength="56" required />
 
-                <label>RFC *</label>
+                <label>RFC</label>
                 <input class="form-control mb-2"
                        placeholder="Registro Federal de Contribuyentes" ng-model="proveedor.RFC"
                        maxlength="14" required />
 
                 <label>CURP</label>
                 <input class="form-control mb-2"
-                        placeholder="Clave Única de Registro de Población" ng-model="proveedor.CURP" />
+                       placeholder="Clave Única de Registro de Población" ng-model="proveedor.CURP" maxlength="18" required />
 
                 <label>Giro Comercial</label>
                 <input class="form-control"
-                       ng-model="proveedor.Giro_Comercial" />
+                       ng-model="proveedor.Giro_Comercial" maxlength="32" />
 
                 <label>Estratificación</label>
                 <input class="form-control"
                        placeholder="Micro,Pequeña o Mediana Empresa" ng-model="proveedor.Estratificacion" />
-                
+
                 <label>Fecha de solicitud</label>
                 <input type="date" ng-model="proveedor.Fecha_Solicitud" ng-required="true" class="form-control" />
 
             </div>
         </div>
 
-        <!-- ================= DOMICILIO ================= -->
+        <!-- DOMICILIO -->
         <div class="card mb-4 shadow-sm">
             <div class="card-header bg-light font-weight-bold">
                 Domicilio
             </div>
             <div class="card-body">
-                <label>Calle *</label>
-                <input class="form-control mb-2" ng-model="proveedor.Calle" />
-                <label>Colonia *</label>
+                <label>Calle</label>
+                <input class="form-control mb-2" ng-model="proveedor.Calle" maxlength="30"/>
+                <label>Colonia</label>
                 <input class="form-control mb-2" ng-model="proveedor.Colonia" />
 
                 <div class="row">
                     <div class="col-md-6">
-                        <label>No.Exterior *</label>
-                        <input class="form-control mb-2" ng-model="proveedor.No_Exterior" />
+                        <label>No.Exterior</label>
+                        <input class="form-control mb-2" ng-model="proveedor.No_Exterior" maxlength="6" />
                     </div>
                     <div class="col-md-6">
-                        <label>No. Interior *</label>
-                        <input class="form-control mb-2" ng-model="proveedor.No_Interior" />
+                        <label>No. Interior</label>
+                        <input class="form-control mb-2" ng-model="proveedor.No_Interior" maxlength="6"/>
                     </div>
                 </div>
-                <label>Código postal *</label>
-                <input class="form-control mb-2" ng-model="proveedor.Codigo_Postal" />
-                <label>Localidad *</label>
+                <label>Código postal</label>
+                <input class="form-control mb-2" ng-model="proveedor.Codigo_Postal" maxlength="6" />
+                <label>Localidad</label>
                 <input class="form-control mb-2" ng-model="proveedor.Localidad" />
-                <label>Municipio *</label>
+                <label>Municipio</label>
                 <input class="form-control mb-2" ng-model="proveedor.Municipio" />
-                <label>Estado *</label>
+                <label>Estado</label>
                 <input class="form-control" ng-model="proveedor.Estado" />
 
             </div>
         </div>
 
-        <!-- ================= CONTACTO ================= -->
+        <!-- CONTACTO -->
         <div class="card mb-4 shadow-sm">
             <div class="card-header bg-light font-weight-bold">
                 Datos de Contacto
             </div>
             <div class="card-body">
-                <label>Teléfono *</label>
-                <input class="form-control mb-2" ng-model="proveedor.Telefono" />
-                <label>Fax *</label>
+                <label>Teléfono </label>
+                <input class="form-control mb-2" ng-model="proveedor.Telefono" maxlength="14"/>
+                <label>Fax (opcional)</label>
                 <input class="form-control mb-2" ng-model="proveedor.Fax" />
-                <label>Página Web *</label>
+                <label>Página Web (opcional)</label>
                 <input class="form-control" ng-model="proveedor.Pagina_Web" />
 
             </div>
         </div>
 
-        <!-- ================= REPRESENTANTE ================= -->
+        <!-- REPRESENTANTE -->
         <div class="card mb-4 shadow-sm">
             <div class="card-header bg-light font-weight-bold">
                 Representante Legal
             </div>
             <div class="card-body">
-                <label>Nombre *</label>
+                <label>Nombre (opcional)</label>
                 <input class="form-control mb-2" ng-model="proveedor.Rep_Nombre" />
-                <label>Teléfono *</label>
+                <label>Teléfono (opcional)</label>
                 <input class="form-control mb-2" ng-model="proveedor.Rep_Telefono" />
-                <label>Extensión *</label>
+                <label>Extensión (opcional)</label>
                 <input class="form-control mb-2" ng-model="proveedor.Rep_Extension" />
-                <label>Correo electrónico *</label>
+                <label>Correo electrónico (opcional)</label>
                 <input class="form-control mb-2" ng-model="proveedor.Rep_Correo_E" />
-                <label>Número de acta *</label>
+                <label>Número de acta (opcional)</label>
                 <input class="form-control mb-2" ng-model="proveedor.Rep_Numero_Acta" />
-                <label>Número de poder *</label>
+                <label>Número de poder (opcional)</label>
                 <input class="form-control mb-2" ng-model="proveedor.Rep_Numero_Poder" />
-                <label>Notario/Notaría *</label>
+                <label>Notario/Notaría (opcional)</label>
                 <input class="form-control mb-2" ng-model="proveedor.Rep_Notario_Notaria" />
-                <label>Personal designado para trámites ante la institución *</label>
+                <label>Personal designado para trámites ante la institución (opcional)</label>
                 <input class="form-control" ng-model="proveedor.Rep_Personal_Tramite" />
-                <label>Teléfono *</label>
+                <label>Teléfono (opcional)</label>
                 <input class="form-control" ng-model="proveedor.Tra_Telefono" />
-                <label>Extensión *</label>
+                <label>Extensión (opcional)</label>
                 <input class="form-control" ng-model="proveedor.Tra_Extension" />
-                <label>Correo electrónico *</label>
+                <label>Correo electrónico (opcional)</label>
                 <input class="form-control" ng-model="proveedor.Tra_Correo_E" />
 
             </div>
         </div>
 
-        <!-- ================= DATOS BANCARIOS ================= -->
+        <!-- DATOS BANCARIOS -->
         <div class="card mb-4 shadow-sm">
             <div class="card-header bg-light font-weight-bold">
                 Datos Bancarios
             </div>
             <div class="card-body">
-                <label>Banco *</label>
+                <label>Banco </label>
                 <input class="form-control mb-2" ng-model="proveedor.Ban_Banco" />
-                <label>Cuenta *</label>
-                <input class="form-control mb-2" ng-model="proveedor.Ban_Cuenta" />
-                <label>Sucursal *</label>
+                <label>Cuenta </label>
+                <input class="form-control mb-2" ng-model="proveedor.Ban_Cuenta" maxlength="18" />
+                <label>Sucursal </label>
                 <input class="form-control mb-2" ng-model="proveedor.Ban_Sucursal" />
-                <label>CLABE *</label>
-                <input class="form-control" ng-model="proveedor.Ban_Clabe" />
+                <label>CLABE </label>
+                <input class="form-control" ng-model="proveedor.Ban_Clabe" maxlength="18"/>
 
             </div>
         </div>
 
-        <!-- ================= DOCUMENTOS PERSONA FÍSICA ================= -->
+        <!-- DOCUMENTOS PERSONA FÍSICA -->
         <div ng-show="proveedor.IdTipoPersona == 1" class="card mt-4">
             <div class="card-header bg-light">
                 <strong>Documentos requeridos – Persona Física</strong>
@@ -187,31 +187,31 @@
 
             <div class="card-body">
                 <div class="form-group">
-                    <label>Acta de Nacimiento *</label>
+                    <label>Acta de Nacimiento </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],1)">
                 </div>
 
                 <div class="form-group">
-                    <label>Identificación Oficial *</label>
+                    <label>Identificación Oficial </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],2)">
                 </div>
 
                 <div class="form-group">
-                    <label>Constancia de Situación Fiscal (SAT) *</label>
+                    <label>Constancia de Situación Fiscal (SAT) </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],3)">
                 </div>
 
                 <div class="form-group">
-                    <label>Última Declaración de Impuestos *</label>
+                    <label>Última Declaración de Impuestos </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],4)">
                 </div>
 
                 <div class="form-group">
-                    <label>Último Estado de Cuenta Bancario *</label>
+                    <label>Último Estado de Cuenta Bancario </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],5)">
                 </div>
@@ -220,7 +220,7 @@
 
 
 
-        <!-- ================= DOCUMENTOS PERSONA MORAL ================= -->
+        <!-- DOCUMENTOS PERSONA MORAL -->
         <div ng-show="proveedor.IdTipoPersona == 2" class="card mt-4">
             <div class="card-header bg-light">
                 <strong>Documentos requeridos – Persona Moral</strong>
@@ -228,37 +228,37 @@
 
             <div class="card-body">
                 <div class="form-group">
-                    <label>Acta Constitutiva *</label>
+                    <label>Acta Constitutiva </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],6)">
                 </div>
 
                 <div class="form-group">
-                    <label>Poder Notarial *</label>
+                    <label>Poder Notarial </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],7)">
                 </div>
 
                 <div class="form-group">
-                    <label>Identificación Oficial del Representante Legal *</label>
+                    <label>Identificación Oficial del Representante Legal </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],8)">
                 </div>
 
                 <div class="form-group">
-                    <label>Registro Federal de Contribuyentes (RFC) *</label>
+                    <label>Registro Federal de Contribuyentes (RFC) </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],9)">
                 </div>
 
                 <div class="form-group">
-                    <label>Última Declaración de Impuestos *</label>
+                    <label>Última Declaración de Impuestos </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],4)">
                 </div>
 
                 <div class="form-group">
-                    <label>Último Estado de Cuenta Bancario *</label>
+                    <label>Último Estado de Cuenta Bancario </label>
                     <input type="file" class="form-control-file"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],5)">
                 </div>
@@ -267,15 +267,64 @@
 
 
 
-        <!-- ================= GUARDAR ================= -->
+        <!-- GUARDAR -->
         <div class="text-center mt-5">
             <button type="button"
+                    id="btnGuardarRegistro"
                     ng-click="guardarTodo()"
+                    ng-disabled="!formularioValido()"
                     class="btn btn-success btn-lg px-5 shadow">
                 Guardar Registro
             </button>
 
         </div>
+    </form>
+</div>
+
+@*@section scripts{
+    <script>
+        document.getElementById("btnGuardarRegistro")?.addEventListener("click", function () {
+
+            Swal.fire({
+                title: '¿Guardar?',
+                text: 'Estás a punto de guardar la información de pre-registro.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, guardar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    Swal.fire({
+                        title: 'Registro realizado con éxito',
+                        text: 'La información fue guardada correctamente.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#28a745'
+                    }).then(() => {
+
+                        /*document.getElementById("formEditar").submit();*/
+
+                    });
+
+                }
+            });
+
+        });
+    </script>*@
+
+
+
+
+
+
+
+
+
+
 
 
 

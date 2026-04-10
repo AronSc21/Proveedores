@@ -107,10 +107,9 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idProveedor" Type="int" Nullable="false" />
-          <Property Name="anio" Type="int" Nullable="false" />
           <Property Name="fechaSolicitud" Type="datetime" Nullable="false" />
-          <Property Name="fechaResolucion" Type="datetime" />
-          <Property Name="Estatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fechaValidacion" Type="datetime" />
+          <Property Name="fechaVigencia" Type="datetime" />
         </EntityType>
         <EntityType Name="Requisitos_Tramite">
           <Key>
@@ -214,6 +213,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Proveedores_Validacion">
+              <PropertyRef Name="idProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Refrendos_Proveedores">
+          <End Role="Proveedores" Type="Self.Proveedores" Multiplicity="1" />
+          <End Role="Refrendos" Type="Self.Refrendos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedores">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Refrendos">
               <PropertyRef Name="idProveedor" />
             </Dependent>
           </ReferentialConstraint>
@@ -747,6 +758,10 @@
             <End Role="Proveedores" EntitySet="Proveedores" />
             <End Role="Proveedores_Validacion" EntitySet="Proveedores_Validacion" />
           </AssociationSet>
+          <AssociationSet Name="FK_Refrendos_Proveedores" Association="Self.FK_Refrendos_Proveedores">
+            <End Role="Proveedores" EntitySet="Proveedores" />
+            <End Role="Refrendos" EntitySet="Refrendos" />
+          </AssociationSet>
           <AssociationSet Name="FK_Requisitos_TipoDocumento" Association="Self.FK_Requisitos_TipoDocumento">
             <End Role="Cat_TipoDocumento" EntitySet="Cat_TipoDocumento" />
             <End Role="Requisitos_Tramite" EntitySet="Requisitos_Tramite" />
@@ -1201,7 +1216,6 @@
           <EntitySet Name="Cat_TipoPersona" EntityType="ProveedoresModel.Cat_TipoPersona" />
           <EntitySet Name="Cat_TipoTramite" EntityType="ProveedoresModel.Cat_TipoTramite" />
           <EntitySet Name="Documentos_Proveedor" EntityType="ProveedoresModel.Documentos_Proveedor" />
-          <EntitySet Name="Refrendos" EntityType="ProveedoresModel.Refrendos" />
           <EntitySet Name="Requisitos_Tramite" EntityType="ProveedoresModel.Requisitos_Tramite" />
           <AssociationSet Name="FK_Doc_TipoDocumento" Association="ProveedoresModel.FK_Doc_TipoDocumento">
             <End Role="Cat_TipoDocumento" EntitySet="Cat_TipoDocumento" />
@@ -1256,6 +1270,11 @@
           <AssociationSet Name="FK_Usuarios_Proveedores_Roles" Association="ProveedoresModel.FK_Usuarios_Proveedores_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Usuarios_Proveedores" EntitySet="Usuarios_Proveedores" />
+          </AssociationSet>
+          <EntitySet Name="Refrendos" EntityType="ProveedoresModel.Refrendos" />
+          <AssociationSet Name="FK_Refrendos_Proveedores" Association="ProveedoresModel.FK_Refrendos_Proveedores">
+            <End Role="Proveedores" EntitySet="Proveedores" />
+            <End Role="Refrendos" EntitySet="Refrendos" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="csp_buscar_provedor_RFC_Result">
@@ -1623,17 +1642,6 @@
           <NavigationProperty Name="Cat_TipoTramite" Relationship="ProveedoresModel.FK_Doc_TipoTramite" FromRole="Documentos_Proveedor" ToRole="Cat_TipoTramite" />
           <NavigationProperty Name="Proveedores" Relationship="ProveedoresModel.FK_Doc_Proveedor" FromRole="Documentos_Proveedor" ToRole="Proveedores" />
         </EntityType>
-        <EntityType Name="Refrendos">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="idProveedor" Type="Int32" Nullable="false" />
-          <Property Name="anio" Type="Int32" Nullable="false" />
-          <Property Name="fechaSolicitud" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="fechaResolucion" Type="DateTime" Precision="3" />
-          <Property Name="Estatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="Requisitos_Tramite">
           <Key>
             <PropertyRef Name="Id" />
@@ -1761,6 +1769,7 @@
           <NavigationProperty Name="Cat_TipoTramite" Relationship="ProveedoresModel.FK_Proveedor_TipoTramite" FromRole="Proveedores" ToRole="Cat_TipoTramite" />
           <NavigationProperty Name="Documentos_Proveedor" Relationship="ProveedoresModel.FK_Doc_Proveedor" FromRole="Proveedores" ToRole="Documentos_Proveedor" />
           <NavigationProperty Name="Proveedores_Validacion" Relationship="ProveedoresModel.FK_Proveedores_Validacion_Proveedores" FromRole="Proveedores" ToRole="Proveedores_Validacion" />
+          <NavigationProperty Name="Refrendos" Relationship="ProveedoresModel.FK_Refrendos_Proveedores" FromRole="Proveedores" ToRole="Refrendos" />
         </EntityType>
         <EntityType Name="Proveedores_Validacion">
           <Key>
@@ -1883,6 +1892,29 @@
             </Principal>
             <Dependent Role="Usuarios_Proveedores">
               <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Refrendos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idProveedor" Type="Int32" Nullable="false" />
+          <Property Name="fechaSolicitud" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fechaValidacion" Type="DateTime" Precision="3" />
+          <Property Name="fechaVigencia" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Proveedores" Relationship="ProveedoresModel.FK_Refrendos_Proveedores" FromRole="Refrendos" ToRole="Proveedores" />
+        </EntityType>
+        <Association Name="FK_Refrendos_Proveedores">
+          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="1" />
+          <End Type="ProveedoresModel.Refrendos" Role="Refrendos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedores">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Refrendos">
+              <PropertyRef Name="idProveedor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2345,18 +2377,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Refrendos">
-            <EntityTypeMapping TypeName="ProveedoresModel.Refrendos">
-              <MappingFragment StoreEntitySet="Refrendos">
-                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
-                <ScalarProperty Name="fechaResolucion" ColumnName="fechaResolucion" />
-                <ScalarProperty Name="fechaSolicitud" ColumnName="fechaSolicitud" />
-                <ScalarProperty Name="anio" ColumnName="anio" />
-                <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Requisitos_Tramite">
             <EntityTypeMapping TypeName="ProveedoresModel.Requisitos_Tramite">
               <MappingFragment StoreEntitySet="Requisitos_Tramite">
@@ -2454,6 +2474,17 @@
                 <ScalarProperty Name="idRol" ColumnName="idRol" />
                 <ScalarProperty Name="contrasena" ColumnName="contrasena" />
                 <ScalarProperty Name="usuario" ColumnName="usuario" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Refrendos">
+            <EntityTypeMapping TypeName="ProveedoresModel.Refrendos">
+              <MappingFragment StoreEntitySet="Refrendos">
+                <ScalarProperty Name="fechaVigencia" ColumnName="fechaVigencia" />
+                <ScalarProperty Name="fechaValidacion" ColumnName="fechaValidacion" />
+                <ScalarProperty Name="fechaSolicitud" ColumnName="fechaSolicitud" />
+                <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

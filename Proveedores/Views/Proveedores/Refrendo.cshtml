@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "Solicitud de Refrendo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4 style="text-align:center">SOLICITUD DE REFRENDO</h4>
+        </div>
+
+        <div class="panel-body">
+
+            <!-- BUSQUEDA -->
+            <form method="post"
+                  action="@Url.Action("BuscarRefrendo","Proveedores")">
+
+                <div class="form-group">
+                    <label>No. Proveedor</label>
+                    <input type="text"
+                           name="IdProveedor"
+                           class="form-control"
+                           placeholder="TRIJAEV-0001"
+                           required />
+                </div>
+
+                <div class="form-group">
+                    <label>RFC</label>
+                    <input type="text"
+                           name="RFC"
+                           class="form-control"
+                           required />
+                </div>
+
+                <br />
+
+                <button type="submit" class="btn btn-primary">
+                    Buscar
+                </button>
+
+            </form>
+
+            <br />
+
+            <!-- MENSAJES -->
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+
+            @if (TempData["Exito"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["Exito"]
+                </div>
+            }
+
+            <!-- RESULTADO -->
+            @if (ViewBag.IdProveedor != null)
+            {
+                <hr />
+
+                <h4>Información del proveedor</h4>
+
+                <div class="form-group">
+                    <label>No. Proveedor</label>
+                    <input class="form-control"
+                           value="TRIJAEV-@ViewBag.IdProveedor"
+                           readonly />
+                </div>
+
+                <div class="form-group">
+                    <label>Razón Social</label>
+                    <input class="form-control"
+                           value="@ViewBag.RazonSocial"
+                           readonly />
+                </div>
+
+                <div class="form-group">
+                    <label>Vigente hasta</label>
+                    <input class="form-control"
+                           value="@(((DateTime?)ViewBag.Vigencia)?.ToString("dd/MM/yyyy"))"
+                           readonly />
+                </div>
+
+                <br />
+
+                <!-- 30 DIAS -->
+                if (ViewBag.SolicitudPendiente == true)
+                {
+                    <p style="color:red; margin-top:10px;">
+                        Ya existe una solicitud de refrendo pendiente.
+                        Debe esperar a que sea validada por el Tribunal.
+                    </p>
+                }
+                else
+                {
+                    if (ViewBag.PuedeRefrendar == true)
+                    {
+                        <form method="post"
+                              action="@Url.Action("GenerarRefrendo","Proveedores")">
+
+                            <input type="hidden"
+                                   name="idProveedor"
+                                   value="@ViewBag.IdProveedor" />
+
+                            <button type="submit" class="btn btn-success">
+                                Generar solicitud de refrendo
+                            </button>
+
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary" disabled>
+                            Aún no puede solicitar refrendo
+                        </button>
+
+                        if (ViewBag.DiasRestantes != null)
+                        {
+                            <p style="color:red; margin-top:10px;">
+                                Faltan @ViewBag.DiasRestantes días para que venza.
+                                Solo puede solicitar refrendo cuando falten 30 días o menos.
+                            </p>
+                        }
+                    }
+                }
+
+            }
+
+
+        </div>
+    </div>
+</div>
+@if (ViewBag.DescargarRenovacion != null)
+{
+    <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    var idProveedor = '@ViewBag.DescargarRenovacion';
+
+    // CLAVE ÚNICA POR PROVEEDOR
+    var key = "refrendo_descargado_" + idProveedor;
+
+    // SI NO SE HA DESCARGADO
+    if (!sessionStorage.getItem(key)) {
+
+        var url = '@Url.Action("GenerarReporteRenovacion","Proveedores")' + '?idProveedor=' + idProveedor;
+
+        window.open(url, '_blank');
+
+        // MARCAR COMO YA DESCARGADO
+        sessionStorage.setItem(key, "true");
+    }
+
+});
+
+    </script>
+}

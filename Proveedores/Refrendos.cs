@@ -16,9 +16,10 @@ namespace Proveedores
     {
         public int id { get; set; }
         public int idProveedor { get; set; }
-        public int anio { get; set; }
         public System.DateTime fechaSolicitud { get; set; }
-        public Nullable<System.DateTime> fechaResolucion { get; set; }
-        public string Estatus { get; set; }
+        public Nullable<System.DateTime> fechaValidacion { get; set; }
+        public Nullable<System.DateTime> fechaVigencia { get; set; }
+    
+        public virtual Proveedores Proveedores { get; set; }
     }
 }

@@ -1,203 +1,730 @@
 ﻿@using Proveedores
+@using Proveedores.Models
 @model Proveedores
+
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Datos del Proveedor";
 }
+<div class="encabezado-login">
+    <div class="encabezado-contenido">
 
-<div class="container" style="margin-top:30px; margin-bottom:50px;">
+        <div class="logo">
+            <img src="~/Content/logo.jpeg" alt="Logo TRIJAEV" />
+        </div>
+
+        <div class="titulo">
+            <h2>Sistema de Padrón de Proveedores V 2.0</h2>
+            <p>Dirección de Administración</p>
+            <p>Subdirección de Recursos Materiales</p>
+        </div>
+
+    </div>
+
+</div>
+<style>
+    .tab button {
+        background-color: #337ab7;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        margin-right: 5px;
+    }
+
+        .tab button:hover {
+            background-color: #286090;
+        }
+
+        .tab button.active {
+            background-color: #204d74;
+        }
+</style>
+<div class="container" @*style="margin-top:30px; margin-bottom:50px;"*@>
 
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 style="text-align:center;">
-                DATOS GENERALES DEL PROVEEDOR
-            </h3>
+            <h4 style="text-align:center">
+                EXPEDIENTE DEL PROVEEDOR
+            </h4>
         </div>
 
         <div class="panel-body">
+            @*@ViewBag.Modo*@
+            @*@if (ViewBag.Modo == "editar")
+        {
+            <form method="post" action="@Url.Action("ActualizarProveedor","Login")">
+                <input type="hidden" name="Id" value="@Model.Id" />*@
 
-            <!-- ========================= -->
-            <!-- DATOS GENERALES -->
-            <!-- ========================= -->
-            <h4><strong>DATOS GENERALES</strong></h4>
+            @*@if (ViewBag.Modo == "editar")
+        {*@
+            <form id="formEditar" method="post" enctype="multipart/form-data" action="@Url.Action("ActualizarProveedor","Login")">
+                <input type="hidden" name="Id" value="@Model.Id" />
+
+                <!-- BOTONES -->
+                <div class="tab">
+                    <button type="button" class="tablinks active" onclick="openTab(event,'generales')" id="defaultOpen">
+                        DATOS GENERALES
+                    </button>
+
+                    <button type="button" class="tablinks" onclick="openTab(event,'domicilio')">
+                        DOMICILIO
+                    </button>
+
+                    <button type="button" class="tablinks" onclick="openTab(event,'contacto')">
+                        DATOS DE CONTACTO
+                    </button>
+
+                    <button type="button" class="tablinks" onclick="openTab(event,'representante')">
+                        REPRESENTANTE LEGAL
+                    </button>
+
+                    <button type="button" class="tablinks" onclick="openTab(event,'bancarios')">
+                        DATOS BANCARIOS
+                    </button>
+
+                    <button type="button" class="tablinks" onclick="openTab(event,'documentos')">
+                        DOCUMENTOS
+                    </button>
+                </div>
+
+                <br />
+
+                <!-- ======================= -->
+                <!-- DATOS GENERALES -->
+                <!-- ======================= -->
+                <div id="generales" class="panel tabcontent" style="display:block;">
+                    <div class="panel-heading">
+                        <h4>DATOS GENERALES</h4>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>No. Proveedor</label>
+                                <input class="form-control"
+                                       name="Id"
+                                       value="TRIJAEV-@Model.Id" readonly />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Razón Social</label>
+                                <input class="form-control"
+                                       name="Razon_Social"
+                                       value="@Model.Razon_Social" readonly />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>RFC</label>
+                                <input class="form-control"
+                                       name="RFC"
+                                       value="@Model.RFC" readonly />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>CURP</label>
+                                <input class="form-control"
+                                       name="CURP"
+                                       value="@Model.CURP"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            @*<br />*@
+
+                            @*<div class="row">*@
+                            <div class="col-md-4">
+                                <label>Estratificación</label>
+                                <input class="form-control"
+                                       name="Estratificacion"
+                                       value="@Model.Estratificacion"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Giro Comercial</label>
+                                <input class="form-control"
+                                       name="Giro_Comercial"
+                                       value="@Model.Giro_Comercial"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Fecha de solicitud</label>
+                                <input class="form-control"
+                                       name="Fecha_Solicitud"
+                                       value="@Model.Fecha_Solicitud" readonly />
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <!-- ======================= -->
+                <!-- DOMICILIO -->
+                <!-- ======================= -->
+                <div id="domicilio" class="panel tabcontent" style="display:none;">
+                    <div class="panel-heading">
+                        <h4>DOMICILIO</h4>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Calle</label>
+                                <input class="form-control"
+                                       name="Calle"
+                                       value="@Model.Calle"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Colonia</label>
+                                <input class="form-control"
+                                       name="Colonia"
+                                       value="@Model.Colonia"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>No. Exterior</label>
+                                <input class="form-control"
+                                       name="No_Exterior"
+                                       value="@Model.No_Exterior"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>No. Interior</label>
+                                <input class="form-control"
+                                       name="No_Interior"
+                                       value="@Model.No_Interior"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Código postal</label>
+                                <input class="form-control"
+                                       name="Codigo_Postal"
+                                       value="@Model.Codigo_Postal"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Localidad</label>
+                                <input class="form-control"
+                                       name="Localidad"
+                                       value="@Model.Localidad"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Municipio</label>
+                                <input class="form-control"
+                                       name="Municipio"
+                                       value="@Model.Municipio"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Estado</label>
+                                <input class="form-control"
+                                       name="Estado"
+                                       value="@Model.Estado"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======================= -->
+                <!-- CONTACTO -->
+                <!-- ======================= -->
+                <div id="contacto" class="panel tabcontent" style="display:none;">
+                    <div class="panel-heading">
+                        <h4>DATOS DE CONTACTO</h4>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Teléfono</label>
+                                <input class="form-control"
+                                       name="Telefono"
+                                       value="@Model.Telefono"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Fax</label>
+                                <input class="form-control"
+                                       name="Fax"
+                                       value="@Model.Fax"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Página Web</label>
+                                <input class="form-control"
+                                       name="Pagina_Web"
+                                       value="@Model.Pagina_Web"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======================= -->
+                <!-- REPRESENTANTE -->
+                <!-- ======================= -->
+                <div id="representante" class="panel tabcontent" style="display:none;">
+                    <div class="panel-heading">
+                        <h4>REPRESENTANTE LEGAL</h4>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Nombre</label>
+                                <input class="form-control"
+                                       name="Rep_Nombre"
+                                       value="@Model.Rep_Nombre"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Teléfono</label>
+                                <input class="form-control"
+                                       name="Rep_Telefono"
+                                       value="@Model.Rep_Telefono"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Extensión</label>
+                                <input class="form-control"
+                                       name="Rep_Extension"
+                                       value="@Model.Rep_Extension"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Correo electrónico</label>
+                                <input class="form-control"
+                                       name="Rep_Correo_E"
+                                       value="@Model.Rep_Correo_E"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Número de acta</label>
+                                <input class="form-control"
+                                       name="Rep_Numero_Acta"
+                                       value="@Model.Rep_Numero_Acta"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Número de poder notarial</label>
+                                <input class="form-control"
+                                       name="Rep_Numero_Poder"
+                                       value="@Model.Rep_Numero_Poder"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Notario/Notaría</label>
+                                <input class="form-control"
+                                       name="Rep_Notario_Notaria"
+                                       value="@Model.Rep_Notario_Notaria"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <br />
+
+                            <div class="panel-heading">
+                                <h4>PERSONAL DESIGNADO PARA TRÁMITES</h4>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Personal designado para trámites antes la institución</label>
+                                <input class="form-control"
+                                       name="Rep_personal_Tramite"
+                                       value="@Model.Rep_Personal_Tramite"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Teléfono</label>
+                                <input class="form-control"
+                                       name="Tra_Telefono"
+                                       value="@Model.Tra_Telefono"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Extensión</label>
+                                <input class="form-control"
+                                       name="Tra_Extension"
+                                       value="@Model.Tra_Extension"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Correo Electrónico</label>
+                                <input class="form-control"
+                                       name="Tra_Correo_E"
+                                       value="@Model.Tra_Correo_E"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======================= -->
+                <!-- BANCARIOS -->
+                <!-- ======================= -->
+                <div id="bancarios" class="panel tabcontent" style="display:none;">
+                    <div class="panel-heading">
+                        <h4>DATOS BANCARIOS</h4>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Banco</label>
+                                <input class="form-control"
+                                       name="Ban_Banco"
+                                       value="@Model.Ban_Banco"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Cuenta</label>
+                                <input class="form-control"
+                                       name="Ban_Cuenta"
+                                       value="@Model.Ban_Cuenta"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Sucursal</label>
+                                <input class="form-control"
+                                       name="Ban_Sucursal"
+                                       value="@Model.Ban_Sucursal"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>CLABE</label>
+                                <input class="form-control"
+                                       name="Ban_Clabe"
+                                       value="@Model.Ban_Clabe"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======================= -->
+                <!-- DOCUMENTOS -->
+                <!-- ======================= -->
+                <div id="documentos" class="panel tabcontent" style="display:none;">
+
+                    <div class="panel-heading">
+                        <h4>DOCUMENTOS DEL PROVEEDOR</h4>
+                    </div>
+
+                    <div class="panel-body">
+                        @{
+                            var docsBD = (List<DocumentoVM>)ViewBag.Documentos ?? new List<DocumentoVM>();
+                            var requeridos = (List<int>)ViewBag.DocumentosRequeridos;
+                            var nombres = (Dictionary<int, string>)ViewBag.NombresDocumentos;
+                        }
+
+                        @if (!docsBD.Any())
+                        {
+                            <p>No hay documentos cargados.</p>
+                        }
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Tipo Documento</th>
+                                    <th>Fecha de carga</th>
+                                    <th>Ver</th>
+                                    @if (ViewBag.Modo == "editar")
+                                    {
+                                        <th>Actualizar documento</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var tipo in requeridos)
+                                {
+                                    var doc = docsBD.FirstOrDefault(d => d.IdTipoDocumento == tipo);
+
+                                    <tr>
+                                        <td>@nombres[tipo]</td>
+
+                                        <td>
+                                            @(doc != null ? doc.FechaCarga.ToString("dd/MM/yyyy") : "Sin documento")
+                                        </td>
+
+                                        <td>
+                                            @if (doc != null)
+                                            {
+                                                <a href="@Url.Action("VerDocumento", "Documentos", new { id = doc.Id })"
+                                                   target="_blank"
+                                                   class="btn btn-primary btn-sm">
+                                                    Ver PDF
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">No disponible</span>
+                                            }
+                                        </td>
+
+                                        @if (ViewBag.Modo == "editar")
+                                        {
+                                            <td>
+                                                <input type="file"
+                                                       name="archivos"
+                                                       class="form-control"
+                                                       accept=".pdf" />
+
+                                                <input type="hidden"
+                                                       name="tipos"
+                                                       value="@tipo" />
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        @*@if (ViewBag.Documentos != null && ((IEnumerable<dynamic>)ViewBag.Documentos).Any())
+        {
             <table class="table table-bordered">
-                <tr>
-                    <th>No. Proveedor</th>
-                    <td>TRIJAEV-@Model.Id</td>
-                </tr>
-                <tr>
-                    <th>Razón Social</th>
-                    <td>@Model.Razon_Social</td>
-                </tr>
-                <tr>
-                    <th>RFC</th>
-                    <td>@Model.RFC</td>
-                </tr>
-                <tr>
-                    <th>CURP</th>
-                    <td>@Model.CURP</td>
-                </tr>
-                <tr>
-                    <th>Giro Comercial</th>
-                    <td>@Model.Giro_Comercial</td>
-                </tr>
-                <tr>
-                    <th>Estratificación</th>
-                    <td>@Model.Estratificacion</td>
-                </tr>
-                <tr>
-                    <th>Fecha de Solicitud</th>
-                    <td>@Model.Fecha_Solicitud?.ToString("dd/MM/yyyy")</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Tipo Documento</th>
+                        <th>Fecha de carga</th>
+                        <th>Ver</th>
+                        @if (ViewBag.Modo == "editar")
+                        {
+                            <th>Actualizar documento</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var doc in (List<DocumentoVM>)ViewBag.Documentos)
+                    {
+                        <tr>
+                            <td>@doc.NombreDocumento</td>
+                            <td>@doc.FechaCarga.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <a href="@Url.Action("VerDocumento", "Documentos", new { id = doc.Id })"
+                                   target="_blank"
+                                   class="btn btn-primary btn-sm">
+                                    Ver PDF
+                                </a>
+                            </td>
+                            @if (ViewBag.Modo == "editar")
+                            {
+                                <td>
+                                    <input type="file"
+                                           name="archivos"
+                                           class="form-control"
+                                           accept=".pdf" />
+
+
+                                    <input type="hidden"
+                                           name="tipos"
+                                           value="@doc.IdTipoDocumento" />
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
             </table>
+        }
+        else
+        {
+            <p>No hay documentos cargados.</p>
+        }
+        @if (ViewBag.Modo == "validar" && Model.Fecha_Aceptacion == null)
+        {
+            <div style="text-align:right; margin-top:15px;">
+                <button type="button"
+                        id="btnValidar"
+                        class="btn btn-success">
+                    Validar información
+                </button>
+            </div>
+        }*@
+                    </div>
+                </div>
 
-            <hr />
+                <br />
 
-            <!-- ========================= -->
-            <!-- DOMICILIO -->
-            <!-- ========================= -->
-            <h4><strong>DOMICILIO</strong></h4>
-            <table class="table table-bordered">
-                <tr>
-                    <th>Calle</th>
-                    <td>@Model.Calle</td>
-                </tr>
-                <tr>
-                    <th>Colonia</th>
-                    <td>@Model.Colonia</td>
-                </tr>
-                <tr>
-                    <th>No. Exterior</th>
-                    <td>@Model.No_Exterior</td>
-                </tr>
-                <tr>
-                    <th>No. Interior</th>
-                    <td>@Model.No_Interior</td>
-                </tr>
-                <tr>
-                    <th>Código Postal</th>
-                    <td>@Model.Codigo_Postal</td>
-                </tr>
-                <tr>
-                    <th>Localidad</th>
-                    <td>@Model.Localidad</td>
-                </tr>
-                <tr>
-                    <th>Municipio</th>
-                    <td>@Model.Municipio</td>
-                </tr>
-                <tr>
-                    <th>Estado</th>
-                    <td>@Model.Estado</td>
-                </tr>
-            </table>
+                @*<a href="@Url.Action("Lista","Login")" class="btn btn-danger">
+                Regresar
+            </a>*@
 
-            <hr />
 
-            <!-- ========================= -->
-            <!-- DATOS DE CONTACTO -->
-            <!-- ========================= -->
-            <h4><strong>DATOS DE CONTACTO</strong></h4>
-            <table class="table table-bordered">
-                <tr>
-                    <th>Teléfono</th>
-                    <td>@Model.Telefono</td>
-                </tr>
-                <tr>
-                    <th>Fax</th>
-                    <td>@Model.Fax</td>
-                </tr>
-                <tr>
-                    <th>Página Web</th>
-                    <td>@Model.Pagina_Web</td>
-                </tr>
-            </table>
+                @if (ViewBag.Modo == "editar")
+                {
 
-            <hr />
 
-            <!-- ========================= -->
-            <!-- REPRESENTANTE LEGAL -->
-            <!-- ========================= -->
-            <h4><strong>REPRESENTANTE LEGAL</strong></h4>
-            <table class="table table-bordered">
-                <tr>
-                    <th>Nombre</th>
-                    <td>@Model.Rep_Nombre</td>
-                </tr>
-                <tr>
-                    <th>Teléfono</th>
-                    <td>@Model.Rep_Telefono</td>
-                </tr>
-                <tr>
-                    <th>Extensión</th>
-                    <td>@Model.Rep_Extension</td>
-                </tr>
-                <tr>
-                    <th>Correo electrónico</th>
-                    <td>@Model.Rep_Correo_E</td>
-                </tr>
-                <tr>
-                    <th>Número de Acta</th>
-                    <td>@Model.Rep_Numero_Acta</td>
-                </tr>
-                <tr>
-                    <th>Número de Poder</th>
-                    <td>@Model.Rep_Numero_Poder</td>
-                </tr>
-                <tr>
-                    <th>Notario/Notaría</th>
-                    <td>@Model.Rep_Notario_Notaria</td>
-                </tr>
-                <tr>
-                    <th>Personal designado para trámites</th>
-                    <td>@Model.Rep_Personal_Tramite</td>
-                </tr>
-                <tr>
-                    <th>Teléfono</th>
-                    <td>@Model.Tra_Telefono</td>
-                </tr>
-                <tr>
-                    <th>Extensión</th>
-                    <td>@Model.Tra_Extension</td>
-                </tr>
-                <tr>
-                    <th>Correo Electrónico</th>
-                    <td>@Model.Tra_Correo_E</td>
-                </tr>
-            </table>
+                    <button type="button"
+                            id="btnGuardar"
+                            class="btn btn-success"
+                            style="float:right;"
+                            @*@(ViewBag.Modo == "editar" ? "" : "readonly")*@>
+                        Confirmar cambios
+                    </button>
+                }
+            </form>
 
-            <hr />
+            <form id="formValidar" method="post" action="@Url.Action("ValidarProveedor","Login")" style="display:none;">
+                <input type="hidden" name="id" value="@Model.Id" />
+            </form>
 
-            <!-- ========================= -->
-            <!-- DATOS BANCARIOS -->
-            <!-- ========================= -->
-            <h4><strong>DATOS BANCARIOS</strong></h4>
-            <table class="table table-bordered">
-                <tr>
-                    <th>Banco</th>
-                    <td>@Model.Ban_Banco</td>
-                </tr>
-                <tr>
-                    <th>Cuenta</th>
-                    <td>@Model.Ban_Cuenta</td>
-                </tr>
-                <tr>
-                    <th>Sucursal</th>
-                    <td>@Model.Ban_Sucursal</td>
-                </tr>
-                <tr>
-                    <th>CLABE</th>
-                    <td>@Model.Ban_Clabe</td>
-                </tr>
-            </table>
-
-            <br />
-
-            <a href="@Url.Action("Lista","Login")" class="btn btn-default">
+            @*}*@
+            <a href="@Url.Action("Lista","Login")" class="btn btn-danger">
                 Regresar
             </a>
+
+            @*@if (@ViewBag.Modo == "validar" && Model.Fecha_Aceptacion == null)
+            {
+                <form id="formValidar" method="post" action="@Url.Action("ValidarProveedor","Login")" style="display:inline;">
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <button type="button" id="btnValidar" class="btn btn-success" style="float:right;">
+                        Validar información
+                    </button>
+                </form>
+            }*@
 
         </div>
     </div>
 </div>
+
+@section scripts{
+    <script>
+        function openTab(evt, tabName) {
+
+            var i, tabcontent, tablinks;
+
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        document.getElementById("defaultOpen").click();
+    </script>
+
+    <script>
+        document.getElementById("btnValidar")?.addEventListener("click", function () {
+
+            Swal.fire({
+                title: '¿Validar información?',
+                text: 'Vas a validar los datos y documentación del proveedor.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, validar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    Swal.fire({
+                        title: 'Validación exitosa',
+                        text: 'El proveedor ahora forma parte del padrón.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#28a745'
+                    }).then(() => {
+
+                        document.getElementById("formValidar").submit();
+
+                    });
+
+                }
+            });
+
+        });
+    </script>
+    <script>
+        document.getElementById("btnGuardar")?.addEventListener("click", function () {
+
+            Swal.fire({
+                title: '¿Guardar cambios?',
+                text: 'Estás a punto de guardar modificaciones.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, guardar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+                    Swal.fire({
+                        title: 'Cambios guardados con éxito',
+                        text: 'La información fue actualizada correctamente.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#28a745'
+                    }).then(() => {
+
+                        document.getElementById("formEditar").submit();
+
+                    });
+
+                }
+            });
+
+        });
+    </script>
+    @if (ViewBag.DescargarValidacion != null)
+    {
+        <script>
+
+    window.onload = function () {
+
+        var url = '@Url.Action("GenerarReporteValidacion","Login")?idProveedor=@ViewBag.DescargarValidacion';
+
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'ValidacionProveedor.pdf';
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+    }
+
+        </script>
+    }
+
+}

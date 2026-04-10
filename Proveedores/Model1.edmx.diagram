@@ -9,7 +9,6 @@
         <EntityTypeShape EntityType="ProveedoresModel.Cat_TipoPersona" Width="1.5" PointX="6.75" PointY="4.75" />
         <EntityTypeShape EntityType="ProveedoresModel.Cat_TipoTramite" Width="1.5" PointX="0.75" PointY="8.625" />
         <EntityTypeShape EntityType="ProveedoresModel.Documentos_Proveedor" Width="1.5" PointX="6" PointY="8" />
-        <EntityTypeShape EntityType="ProveedoresModel.Refrendos" Width="1.5" PointX="3.375" PointY="2" />
         <EntityTypeShape EntityType="ProveedoresModel.Requisitos_Tramite" Width="1.5" PointX="3" PointY="8.375" />
         <AssociationConnector Association="ProveedoresModel.FK_Doc_TipoDocumento" />
         <AssociationConnector Association="ProveedoresModel.FK_Requisitos_TipoDocumento" />
@@ -29,6 +28,8 @@
         <AssociationConnector Association="ProveedoresModel.FK_Proveedores_Validacion_Proveedores" />
         <AssociationConnector Association="ProveedoresModel.FK_Roles_Permisos_Roles" />
         <AssociationConnector Association="ProveedoresModel.FK_Usuarios_Proveedores_Roles" />
+        <EntityTypeShape EntityType="ProveedoresModel.Refrendos" Width="1.5" PointX="11.625" PointY="9.75" />
+        <AssociationConnector Association="ProveedoresModel.FK_Refrendos_Proveedores" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

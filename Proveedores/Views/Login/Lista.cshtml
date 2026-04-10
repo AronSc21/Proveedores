@@ -5,59 +5,307 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Lista de Proveedores";
 }
+<div class="encabezado-login">
+    <div class="encabezado-contenido">
 
+        <div class="logo">
+            <img src="~/Content/logo.jpeg" alt="Logo TRIJAEV" />
+        </div>
+
+        <div class="titulo">
+            <h2>Sistema de Padrón de Proveedores V 2.0</h2>
+            <p>Dirección de Administración</p>
+            <p>Subdirección de Recursos Materiales</p>
+        </div>
+
+    </div>
+
+</div>
 <div class="container" style="margin-top:40px;">
 
     <div class="row">
         <div class="col-md-12">
 
-            <h3>Padrón de Proveedores</h3>
-            <hr />
+            @*<h3 style="display:inline-block; margin:0;">
+                Padrón de Proveedores
+            </h3>*@
 
-            <table class="table table-bordered table-striped table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>No. Proveedor</th>
-                        <th>RFC</th>
-                        <th>CURP</th>
-                        <th>Razón Social</th>
-                        <th>Giro Comercial</th>
-                        <th>Tipo Persona</th>
-                        <th>Datos Generales</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var p in Model)
-                    {
-                        <tr>
-                            <td>
-                                TRIJAEV-@p.Id
-                            </td>
-                            <td>@p.RFC</td>
-                            <td>@p.CURP</td>
-                            <td>@p.Razon_Social</td>
-                            <td>@p.Giro_Comercial</td>
-                            <td>
-                                @(p.IdTipoPersona == 1 ? "Física" : "Moral")
-                            </td>
-                            <td>
-                                <a href="@Url.Action("Datos", "Login", new { id = p.Id })"
-                                   class="btn btn-info btn-sm">
-                                    Ver
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-            <div class="text-right">
-                <a href="@Url.Action("Logout", "Login")" class="btn btn-danger">
-                    Cerrar sesión
-                </a>
-            </div>
+            <a href="@Url.Action("Logout", "Login")"
+               class="btn btn-danger"
+               style="float:right;">
+                Cerrar sesión
+            </a>
 
         </div>
     </div>
 
+    @*<hr />*@
+
+    <!-- BUSCADOR -->
+    <div class="row" style="margin-bottom:15px;">
+        <div class="col-md-4">
+            <input type="text"
+                   id="buscarProveedor"
+                   class="form-control"
+                   placeholder="Buscar..."
+                   onkeyup="filtrarTabla()" />
+        </div>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="row" style="margin-bottom:15px;">
+        <div class="col-md-12">
+
+            <label><strong>Filtrar por:</strong></label>
+
+            <label style="margin-left:10px;">
+                <input type="radio" name="filtroEstado" value="todos" checked onchange="filtrarPorEstado()" />
+                Todos
+            </label>
+
+            <label style="margin-left:10px;">
+                <input type="radio" name="filtroEstado" value="vigentes" onchange="filtrarPorEstado()" />
+                Vigentes
+            </label>
+
+            <label style="margin-left:10px;">
+                <input type="radio" name="filtroEstado" value="vencidos" onchange="filtrarPorEstado()" />
+                Vencidos
+            </label>
+
+            <label style="margin-left:10px;">
+                <input type="radio" name="filtroEstado" value="pendientes" onchange="filtrarPorEstado()" />
+                Pendientes
+            </label>
+
+        </div>
+
+    </div>
+    <div style="margin-bottom:15px;">
+        <button id="btnExcel" type="button" class="btn btn-success" onclick="descargarExcel()">
+            Descargar Excel
+        </button>
+    </div>
+    <!-- TABLA -->
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>No. Proveedor</th>
+                <th>RFC</th>
+                <th>Razón Social</th>
+                <th>Giro Comercial</th>
+                <th>Tipo Persona</th>
+                <th>Pre-registro validado</th>
+                <th>Detalles</th>
+                <th>Validar Pre-registro</th>
+                <th>Modificación</th>
+                <th>Fecha de vigencia</th>
+            </tr>
+        </thead>
+
+        <tbody id="tablaProveedores">
+            @foreach (var p in Model)
+            {
+                DateTime? vigencia = ViewData["Vigencia_" + p.Id] as DateTime?;
+                bool pendiente = ViewData["Pendiente_" + p.Id] != null
+                                 && (bool)ViewData["Pendiente_" + p.Id];
+
+                <tr data-vigencia="@((vigencia.HasValue ? vigencia.Value.ToString("yyyy-MM-dd") : ""))"
+                    data-pendiente="@pendiente">
+
+                    <td>TRIJAEV-@p.Id</td>
+                    <td>@p.RFC</td>
+                    <td>@p.Razon_Social</td>
+                    <td>@p.Giro_Comercial</td>
+                    <td>
+                        @(p.IdTipoPersona == 1 ? "Física" : "Moral")
+                    </td>
+
+                    <td class="text-center">
+                        @if (p.Fecha_Aceptacion == null)
+                        {
+                            <span style="color:red; font-size:18px;">✖</span>
+                        }
+                        else
+                        {
+                            <span style="color:green; font-size:18px;">✔</span>
+                        }
+                    </td>
+
+                    <td>
+                        <a href="@Url.Action("Datos", "Login", new { id = p.Id })"
+                           class="btn btn-info btn-sm">
+                            Ver
+                        </a>
+                    </td>
+
+                    <td>
+                        <a href="@Url.Action("Datos", "Login", new { id = p.Id, modo = "validar" })"
+                           class="btn btn-primary btn-sm"
+                           style="background-color:#2c7be5; border-color:#2c7be5;">
+                            Validar
+                        </a>
+                    </td>
+
+                    <td>
+                        <a href="@Url.Action("Datos", "Login", new { id = p.Id, modo = "editar" })"
+                           class="btn btn-sm"
+                           style="background-color:#17a2b8; color:white;">
+                            Modificar
+                        </a>
+                    </td>
+
+                    <td>
+                        @if (vigencia != null)
+                        {
+                            if (pendiente)
+                            {
+                                <a href="@Url.Action("ValidarRefrendo","Login", new { id = p.Id })"
+                                   class="btn btn-danger btn-sm">
+                                    @vigencia.Value.ToString("dd/MM/yyyy")
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-default btn-sm" disabled>
+                                    @vigencia.Value.ToString("dd/MM/yyyy")
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            <button class="btn btn-default btn-sm" disabled>
+                                -
+                            </button>
+                        }
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
 </div>
+
+@section scripts{
+
+    <script>
+
+function filtrarTabla() {
+
+    var input = document.getElementById("buscarProveedor");
+    var filtro = input.value.toLowerCase();
+    var filas = document.querySelectorAll("#tablaProveedores tr");
+
+    filas.forEach(function (fila) {
+
+        var texto = fila.textContent.toLowerCase();
+        var coincideTexto = texto.indexOf(filtro) > -1;
+
+        if (coincideTexto) {
+            fila.style.display = "";
+        } else {
+            fila.style.display = "none";
+        }
+
+    });
+
+}
+function descargarExcel() {
+
+    var filtro = document.querySelector('input[name="filtroEstado"]:checked').value;
+
+    var url = '@Url.Action("ExportarExcelProveedores","Login")' + '?filtro=' + filtro;
+
+    window.open(url, '_blank');
+}
+
+        function filtrarPorEstado() {
+
+            var opcion = document.querySelector('input[name="filtroEstado"]:checked').value;
+            var filas = document.querySelectorAll("#tablaProveedores tr");
+
+            var hoy = new Date();
+
+            filas.forEach(function (fila) {
+
+                var vigenciaStr = fila.getAttribute("data-vigencia");
+                var pendiente = fila.getAttribute("data-pendiente") === "True";
+
+                var mostrar = true;
+
+                if (opcion === "todos") {
+                    mostrar = true;
+                }
+
+                else if (opcion === "vigentes") {
+
+                    if (!vigenciaStr) {
+                        mostrar = false;
+                    } else {
+                        var vigencia = new Date(vigenciaStr);
+                        mostrar = vigencia >= hoy && !pendiente;
+                    }
+                }
+
+                else if (opcion === "vencidos") {
+
+                    if (!vigenciaStr) {
+                        mostrar = false;
+                    } else {
+                        var vigencia = new Date(vigenciaStr);
+                        mostrar = vigencia < hoy;
+                    }
+                }
+
+                else if (opcion === "pendientes") {
+                    mostrar = pendiente;
+                }
+
+                fila.style.display = mostrar ? "" : "none";
+            });
+
+            // ============================
+            // 🔥 CONTROL BOTÓN EXCEL
+            // ============================
+            var btnExcel = document.getElementById("btnExcel");
+
+            if (opcion === "pendientes") {
+                btnExcel.style.display = "none";
+            } else {
+                btnExcel.style.display = "inline-block";
+            }
+        }
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    filtrarPorEstado(); // aplica filtro inicial
+
+    var idProveedor = null;
+    var urlReporte = null;
+
+    if ('@ViewBag.DescargarValidacion' !== '') {
+        idProveedor = '@ViewBag.DescargarValidacion';
+        urlReporte = '@Url.Action("GenerarReporteValidacion","Login")';
+    }
+
+    if ('@ViewBag.DescargarActualizacion' !== '') {
+        idProveedor = '@ViewBag.DescargarActualizacion';
+        urlReporte = '@Url.Action("GenerarReporteActualizacion","Login")';
+    }
+
+    if ('@ViewBag.DescargarValidacionRefrendo' !== '') {
+        idProveedor = '@ViewBag.DescargarValidacionRefrendo';
+        urlReporte = '@Url.Action("GenerarReporteValidacionRefrendo","Login")';
+    }
+
+    if (idProveedor !== null && urlReporte !== null) {
+        var url = urlReporte + '?idProveedor=' + idProveedor;
+        window.location.href = url;
+    }
+
+});
+
+    </script>
+
+}
