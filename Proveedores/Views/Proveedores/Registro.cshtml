@@ -64,7 +64,7 @@
 
                 <label>CURP</label>
                 <input class="form-control mb-2"
-                       placeholder="Clave Única de Registro de Población" ng-model="proveedor.CURP" maxlength="18" required />
+                       placeholder="Clave Única de Registro de Población" ng-model="proveedor.CURP" maxlength="18" @*ng-required="proveedor.IdTipoPersona == 1"*@ />
 
                 <label>Giro Comercial</label>
                 <input class="form-control"
@@ -87,7 +87,7 @@
             </div>
             <div class="card-body">
                 <label>Calle</label>
-                <input class="form-control mb-2" ng-model="proveedor.Calle" maxlength="30"/>
+                <input class="form-control mb-2" ng-model="proveedor.Calle" maxlength="30" />
                 <label>Colonia</label>
                 <input class="form-control mb-2" ng-model="proveedor.Colonia" />
 
@@ -98,7 +98,7 @@
                     </div>
                     <div class="col-md-6">
                         <label>No. Interior</label>
-                        <input class="form-control mb-2" ng-model="proveedor.No_Interior" maxlength="6"/>
+                        <input class="form-control mb-2" ng-model="proveedor.No_Interior" maxlength="6" />
                     </div>
                 </div>
                 <label>Código postal</label>
@@ -120,12 +120,19 @@
             </div>
             <div class="card-body">
                 <label>Teléfono </label>
-                <input class="form-control mb-2" ng-model="proveedor.Telefono" maxlength="14"/>
-                <label>Fax (opcional)</label>
-                <input class="form-control mb-2" ng-model="proveedor.Fax" />
+                <input class="form-control mb-2" ng-model="proveedor.Telefono" maxlength="14" />
+                @*<label>Nombre de socios y/o accionistas</label>
+                    <input class="form-control mb-2" ng-model="proveedor.Fax" />*@
                 <label>Página Web (opcional)</label>
                 <input class="form-control" ng-model="proveedor.Pagina_Web" />
-
+                <label>Personal designado para trámites ante la institución (opcional)</label>
+                <input class="form-control" ng-model="proveedor.Rep_Personal_Tramite" />
+                <label>Teléfono (opcional)</label>
+                <input class="form-control" ng-model="proveedor.Tra_Telefono" />
+                <label>Extensión (opcional)</label>
+                <input class="form-control" ng-model="proveedor.Tra_Extension" />
+                <label>Correo electrónico (opcional)</label>
+                <input class="form-control" ng-model="proveedor.Tra_Correo_E" />
             </div>
         </div>
 
@@ -149,14 +156,16 @@
                 <input class="form-control mb-2" ng-model="proveedor.Rep_Numero_Poder" />
                 <label>Notario/Notaría (opcional)</label>
                 <input class="form-control mb-2" ng-model="proveedor.Rep_Notario_Notaria" />
-                <label>Personal designado para trámites ante la institución (opcional)</label>
-                <input class="form-control" ng-model="proveedor.Rep_Personal_Tramite" />
-                <label>Teléfono (opcional)</label>
-                <input class="form-control" ng-model="proveedor.Tra_Telefono" />
-                <label>Extensión (opcional)</label>
-                <input class="form-control" ng-model="proveedor.Tra_Extension" />
-                <label>Correo electrónico (opcional)</label>
-                <input class="form-control" ng-model="proveedor.Tra_Correo_E" />
+                <label>Nombre de socios y/o accionistas</label>
+                <input class="form-control mb-4" ng-model="proveedor.Fax" />
+                @*<label>Personal designado para trámites ante la institución (opcional)</label>
+                    <input class="form-control" ng-model="proveedor.Rep_Personal_Tramite" />
+                    <label>Teléfono (opcional)</label>
+                    <input class="form-control" ng-model="proveedor.Tra_Telefono" />
+                    <label>Extensión (opcional)</label>
+                    <input class="form-control" ng-model="proveedor.Tra_Extension" />
+                    <label>Correo electrónico (opcional)</label>
+                    <input class="form-control" ng-model="proveedor.Tra_Correo_E" />*@
 
             </div>
         </div>
@@ -174,7 +183,7 @@
                 <label>Sucursal </label>
                 <input class="form-control mb-2" ng-model="proveedor.Ban_Sucursal" />
                 <label>CLABE </label>
-                <input class="form-control" ng-model="proveedor.Ban_Clabe" maxlength="18"/>
+                <input class="form-control" ng-model="proveedor.Ban_Clabe" maxlength="18" />
 
             </div>
         </div>
@@ -188,31 +197,31 @@
             <div class="card-body">
                 <div class="form-group">
                     <label>Acta de Nacimiento </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],1)">
                 </div>
 
                 <div class="form-group">
                     <label>Identificación Oficial </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],2)">
                 </div>
 
                 <div class="form-group">
                     <label>Constancia de Situación Fiscal (SAT) </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],3)">
                 </div>
 
                 <div class="form-group">
                     <label>Última Declaración de Impuestos </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],4)">
                 </div>
 
                 <div class="form-group">
                     <label>Último Estado de Cuenta Bancario </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],5)">
                 </div>
             </div>
@@ -229,37 +238,37 @@
             <div class="card-body">
                 <div class="form-group">
                     <label>Acta Constitutiva </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],6)">
                 </div>
 
                 <div class="form-group">
                     <label>Poder Notarial </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],7)">
                 </div>
 
                 <div class="form-group">
                     <label>Identificación Oficial del Representante Legal </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],8)">
                 </div>
 
                 <div class="form-group">
                     <label>Registro Federal de Contribuyentes (RFC) </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],9)">
                 </div>
 
                 <div class="form-group">
                     <label>Última Declaración de Impuestos </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],4)">
                 </div>
 
                 <div class="form-group">
                     <label>Último Estado de Cuenta Bancario </label>
-                    <input type="file" class="form-control-file"
+                    <input type="file" class="form-control-file input-documento"
                            onchange="angular.element(this).scope().agregarDocumento(this.files[0],5)">
                 </div>
             </div>
@@ -270,53 +279,69 @@
         <!-- GUARDAR -->
         <div class="text-center mt-5">
             <button type="button"
-                    id="btnGuardarRegistro"
                     ng-click="guardarTodo()"
-                    ng-disabled="!formularioValido()"
-                    class="btn btn-success btn-lg px-5 shadow">
-                Guardar Registro
+                    ng-disabled="guardando || !formularioValido()"
+                    class="btn btn-success btn-lg">
+                {{ guardando ? 'Guardando...' : 'Guardar Registro' }}
             </button>
+            @*<button type="button"
+                id="btnGuardarRegistro"
+                ng-click="guardarTodo()"
+                ng-disabled="!formularioValido()"
+                class="btn btn-success btn-lg px-5 shadow">
+            <span ng-if="!guardando">Guardar Registro</span>
+            <span ng-if="guardando">Guardando...</span>
+            Guardar Registro
+        </button>*@
 
         </div>
     </form>
 </div>
 
-@*@section scripts{
-    <script>
-        document.getElementById("btnGuardarRegistro")?.addEventListener("click", function () {
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @*<script src="https://www.google.com/recaptcha/api.js?render=6LeZrLUsAAAAAMftoFDKKNjiJXmQ_X2Kf-7YKDn2"></script>*@
 
-            Swal.fire({
-                title: '¿Guardar?',
-                text: 'Estás a punto de guardar la información de pre-registro.',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, guardar',
-                cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#d33'
-            }).then((result) => {
 
-                if (result.isConfirmed) {
 
-                    Swal.fire({
-                        title: 'Registro realizado con éxito',
-                        text: 'La información fue guardada correctamente.',
-                        icon: 'success',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#28a745'
-                    }).then(() => {
 
-                        /*document.getElementById("formEditar").submit();*/
 
-                    });
 
-                }
+    @*<script>
+            document.getElementById("btnGuardarRegistro")?.addEventListener("click", function () {
+
+                Swal.fire({
+                    title: '¿Guardar?',
+                    text: 'Estás a punto de guardar la información de pre-registro.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, guardar',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33'
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+
+                        Swal.fire({
+                            title: 'Registro realizado con éxito',
+                            text: 'La información fue guardada correctamente.',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#28a745'
+                        }).then(() => {
+
+                            /*document.getElementById("formEditar").submit();*/
+
+                        });
+
+                    }
+                });
+
             });
+        </script>*@
 
-        });
-    </script>*@
-
-
+    }
 
 
 

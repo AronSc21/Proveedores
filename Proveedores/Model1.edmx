@@ -66,7 +66,7 @@
           <Property Name="Municipio" Type="varchar(max)" />
           <Property Name="Estado" Type="varchar(max)" />
           <Property Name="Telefono" Type="varchar" MaxLength="50" />
-          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar(max)" />
           <Property Name="Pagina_Web" Type="varchar(max)" />
           <Property Name="Estratificacion" Type="varchar" MaxLength="50" />
           <Property Name="Giro_Comercial" Type="varchar(max)" />
@@ -1238,11 +1238,24 @@
             <End Role="Requisitos_Tramite" EntitySet="Requisitos_Tramite" />
           </AssociationSet>
           <EntitySet Name="Permisos" EntityType="ProveedoresModel.Permisos" />
-          <EntitySet Name="Proveedores" EntityType="ProveedoresModel.Proveedores" />
           <EntitySet Name="Proveedores_Validacion" EntityType="ProveedoresModel.Proveedores_Validacion" />
           <EntitySet Name="Roles" EntityType="ProveedoresModel.Roles" />
           <EntitySet Name="Roles_Permisos" EntityType="ProveedoresModel.Roles_Permisos" />
           <EntitySet Name="Usuarios_Proveedores" EntityType="ProveedoresModel.Usuarios_Proveedores" />
+          <AssociationSet Name="FK_Roles_Permisos_Permisos" Association="ProveedoresModel.FK_Roles_Permisos_Permisos">
+            <End Role="Permisos" EntitySet="Permisos" />
+            <End Role="Roles_Permisos" EntitySet="Roles_Permisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Roles_Permisos_Roles" Association="ProveedoresModel.FK_Roles_Permisos_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Roles_Permisos" EntitySet="Roles_Permisos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuarios_Proveedores_Roles" Association="ProveedoresModel.FK_Usuarios_Proveedores_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios_Proveedores" EntitySet="Usuarios_Proveedores" />
+          </AssociationSet>
+          <EntitySet Name="Refrendos" EntityType="ProveedoresModel.Refrendos" />
+          <EntitySet Name="Proveedores" EntityType="ProveedoresModel.Proveedores" />
           <AssociationSet Name="FK_Proveedor_TipoPersona" Association="ProveedoresModel.FK_Proveedor_TipoPersona">
             <End Role="Cat_TipoPersona" EntitySet="Cat_TipoPersona" />
             <End Role="Proveedores" EntitySet="Proveedores" />
@@ -1255,23 +1268,10 @@
             <End Role="Proveedores" EntitySet="Proveedores" />
             <End Role="Documentos_Proveedor" EntitySet="Documentos_Proveedor" />
           </AssociationSet>
-          <AssociationSet Name="FK_Roles_Permisos_Permisos" Association="ProveedoresModel.FK_Roles_Permisos_Permisos">
-            <End Role="Permisos" EntitySet="Permisos" />
-            <End Role="Roles_Permisos" EntitySet="Roles_Permisos" />
-          </AssociationSet>
           <AssociationSet Name="FK_Proveedores_Validacion_Proveedores" Association="ProveedoresModel.FK_Proveedores_Validacion_Proveedores">
             <End Role="Proveedores" EntitySet="Proveedores" />
             <End Role="Proveedores_Validacion" EntitySet="Proveedores_Validacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_Roles_Permisos_Roles" Association="ProveedoresModel.FK_Roles_Permisos_Roles">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="Roles_Permisos" EntitySet="Roles_Permisos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Usuarios_Proveedores_Roles" Association="ProveedoresModel.FK_Usuarios_Proveedores_Roles">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="Usuarios_Proveedores" EntitySet="Usuarios_Proveedores" />
-          </AssociationSet>
-          <EntitySet Name="Refrendos" EntityType="ProveedoresModel.Refrendos" />
           <AssociationSet Name="FK_Refrendos_Proveedores" Association="ProveedoresModel.FK_Refrendos_Proveedores">
             <End Role="Proveedores" EntitySet="Proveedores" />
             <End Role="Refrendos" EntitySet="Refrendos" />
@@ -1724,53 +1724,6 @@
           <Property Name="accion" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Roles_Permisos" Relationship="ProveedoresModel.FK_Roles_Permisos_Permisos" FromRole="Permisos" ToRole="Roles_Permisos" />
         </EntityType>
-        <EntityType Name="Proveedores">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Razon_Social" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="RFC" Type="String" Nullable="false" MaxLength="14" FixedLength="false" Unicode="false" />
-          <Property Name="CURP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Calle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Colonia" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="No_Exterior" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="No_Interior" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="Codigo_Postal" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Localidad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Municipio" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Estado" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Pagina_Web" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Estratificacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Giro_Comercial" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Extension" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Correo_E" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Numero_Acta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Numero_Poder" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Notario_Notaria" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Rep_Personal_Tramite" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Tra_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Tra_Extension" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Tra_Correo_E" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Ban_Banco" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Ban_Cuenta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Ban_Sucursal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Ban_Clabe" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Fecha_Solicitud" Type="DateTime" Precision="0" />
-          <Property Name="Fecha_Aceptacion" Type="DateTime" Precision="3" />
-          <Property Name="IdTipoPersona" Type="Int32" />
-          <Property Name="IdTipoTramite" Type="Int32" />
-          <Property Name="Fecha_Alta" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Cat_TipoPersona" Relationship="ProveedoresModel.FK_Proveedor_TipoPersona" FromRole="Proveedores" ToRole="Cat_TipoPersona" />
-          <NavigationProperty Name="Cat_TipoTramite" Relationship="ProveedoresModel.FK_Proveedor_TipoTramite" FromRole="Proveedores" ToRole="Cat_TipoTramite" />
-          <NavigationProperty Name="Documentos_Proveedor" Relationship="ProveedoresModel.FK_Doc_Proveedor" FromRole="Proveedores" ToRole="Documentos_Proveedor" />
-          <NavigationProperty Name="Proveedores_Validacion" Relationship="ProveedoresModel.FK_Proveedores_Validacion_Proveedores" FromRole="Proveedores" ToRole="Proveedores_Validacion" />
-          <NavigationProperty Name="Refrendos" Relationship="ProveedoresModel.FK_Refrendos_Proveedores" FromRole="Proveedores" ToRole="Refrendos" />
-        </EntityType>
         <EntityType Name="Proveedores_Validacion">
           <Key>
             <PropertyRef Name="id" />
@@ -1811,42 +1764,6 @@
           <Property Name="idRol" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Roles" Relationship="ProveedoresModel.FK_Usuarios_Proveedores_Roles" FromRole="Usuarios_Proveedores" ToRole="Roles" />
         </EntityType>
-        <Association Name="FK_Proveedor_TipoPersona">
-          <End Type="ProveedoresModel.Cat_TipoPersona" Role="Cat_TipoPersona" Multiplicity="0..1" />
-          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cat_TipoPersona">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Proveedores">
-              <PropertyRef Name="IdTipoPersona" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Proveedor_TipoTramite">
-          <End Type="ProveedoresModel.Cat_TipoTramite" Role="Cat_TipoTramite" Multiplicity="0..1" />
-          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cat_TipoTramite">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Proveedores">
-              <PropertyRef Name="IdTipoTramite" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Doc_Proveedor">
-          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="1" />
-          <End Type="ProveedoresModel.Documentos_Proveedor" Role="Documentos_Proveedor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Proveedores">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Documentos_Proveedor">
-              <PropertyRef Name="IdProveedor" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Roles_Permisos_Permisos">
           <End Type="ProveedoresModel.Permisos" Role="Permisos" Multiplicity="1" />
           <End Type="ProveedoresModel.Roles_Permisos" Role="Roles_Permisos" Multiplicity="*" />
@@ -1856,18 +1773,6 @@
             </Principal>
             <Dependent Role="Roles_Permisos">
               <PropertyRef Name="idPermiso" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Proveedores_Validacion_Proveedores">
-          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="1" />
-          <End Type="ProveedoresModel.Proveedores_Validacion" Role="Proveedores_Validacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Proveedores">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Proveedores_Validacion">
-              <PropertyRef Name="idProveedor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1906,6 +1811,101 @@
           <Property Name="fechaVigencia" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Proveedores" Relationship="ProveedoresModel.FK_Refrendos_Proveedores" FromRole="Refrendos" ToRole="Proveedores" />
         </EntityType>
+        <EntityType Name="Proveedores">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Razon_Social" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RFC" Type="String" Nullable="false" MaxLength="14" FixedLength="false" Unicode="false" />
+          <Property Name="CURP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Calle" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Colonia" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="No_Exterior" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="No_Interior" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="Codigo_Postal" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Localidad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Municipio" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Estado" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Pagina_Web" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Estratificacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Giro_Comercial" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Nombre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Extension" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Correo_E" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Numero_Acta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Numero_Poder" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Notario_Notaria" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Rep_Personal_Tramite" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Tra_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Tra_Extension" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Tra_Correo_E" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Ban_Banco" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Ban_Cuenta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Ban_Sucursal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Ban_Clabe" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Solicitud" Type="DateTime" Precision="0" />
+          <Property Name="Fecha_Aceptacion" Type="DateTime" Precision="3" />
+          <Property Name="IdTipoPersona" Type="Int32" />
+          <Property Name="IdTipoTramite" Type="Int32" />
+          <Property Name="Fecha_Alta" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Cat_TipoPersona" Relationship="ProveedoresModel.FK_Proveedor_TipoPersona" FromRole="Proveedores" ToRole="Cat_TipoPersona" />
+          <NavigationProperty Name="Cat_TipoTramite" Relationship="ProveedoresModel.FK_Proveedor_TipoTramite" FromRole="Proveedores" ToRole="Cat_TipoTramite" />
+          <NavigationProperty Name="Documentos_Proveedor" Relationship="ProveedoresModel.FK_Doc_Proveedor" FromRole="Proveedores" ToRole="Documentos_Proveedor" />
+          <NavigationProperty Name="Proveedores_Validacion" Relationship="ProveedoresModel.FK_Proveedores_Validacion_Proveedores" FromRole="Proveedores" ToRole="Proveedores_Validacion" />
+          <NavigationProperty Name="Refrendos" Relationship="ProveedoresModel.FK_Refrendos_Proveedores" FromRole="Proveedores" ToRole="Refrendos" />
+        </EntityType>
+        <Association Name="FK_Proveedor_TipoPersona">
+          <End Type="ProveedoresModel.Cat_TipoPersona" Role="Cat_TipoPersona" Multiplicity="0..1" />
+          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoPersona">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Proveedores">
+              <PropertyRef Name="IdTipoPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Proveedor_TipoTramite">
+          <End Type="ProveedoresModel.Cat_TipoTramite" Role="Cat_TipoTramite" Multiplicity="0..1" />
+          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cat_TipoTramite">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Proveedores">
+              <PropertyRef Name="IdTipoTramite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Doc_Proveedor">
+          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="1" />
+          <End Type="ProveedoresModel.Documentos_Proveedor" Role="Documentos_Proveedor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedores">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Documentos_Proveedor">
+              <PropertyRef Name="IdProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Proveedores_Validacion_Proveedores">
+          <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="1" />
+          <End Type="ProveedoresModel.Proveedores_Validacion" Role="Proveedores_Validacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedores">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Proveedores_Validacion">
+              <PropertyRef Name="idProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Refrendos_Proveedores">
           <End Type="ProveedoresModel.Proveedores" Role="Proveedores" Multiplicity="1" />
           <End Type="ProveedoresModel.Refrendos" Role="Refrendos" Multiplicity="*" />
@@ -2397,49 +2397,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Proveedores">
-            <EntityTypeMapping TypeName="ProveedoresModel.Proveedores">
-              <MappingFragment StoreEntitySet="Proveedores">
-                <ScalarProperty Name="Fecha_Alta" ColumnName="Fecha_Alta" />
-                <ScalarProperty Name="IdTipoTramite" ColumnName="IdTipoTramite" />
-                <ScalarProperty Name="IdTipoPersona" ColumnName="IdTipoPersona" />
-                <ScalarProperty Name="Fecha_Aceptacion" ColumnName="Fecha_Aceptacion" />
-                <ScalarProperty Name="Fecha_Solicitud" ColumnName="Fecha_Solicitud" />
-                <ScalarProperty Name="Ban_Clabe" ColumnName="Ban_Clabe" />
-                <ScalarProperty Name="Ban_Sucursal" ColumnName="Ban_Sucursal" />
-                <ScalarProperty Name="Ban_Cuenta" ColumnName="Ban_Cuenta" />
-                <ScalarProperty Name="Ban_Banco" ColumnName="Ban_Banco" />
-                <ScalarProperty Name="Tra_Correo_E" ColumnName="Tra_Correo_E" />
-                <ScalarProperty Name="Tra_Extension" ColumnName="Tra_Extension" />
-                <ScalarProperty Name="Tra_Telefono" ColumnName="Tra_Telefono" />
-                <ScalarProperty Name="Rep_Personal_Tramite" ColumnName="Rep_Personal_Tramite" />
-                <ScalarProperty Name="Rep_Notario_Notaria" ColumnName="Rep_Notario_Notaria" />
-                <ScalarProperty Name="Rep_Numero_Poder" ColumnName="Rep_Numero_Poder" />
-                <ScalarProperty Name="Rep_Numero_Acta" ColumnName="Rep_Numero_Acta" />
-                <ScalarProperty Name="Rep_Correo_E" ColumnName="Rep_Correo_E" />
-                <ScalarProperty Name="Rep_Extension" ColumnName="Rep_Extension" />
-                <ScalarProperty Name="Rep_Telefono" ColumnName="Rep_Telefono" />
-                <ScalarProperty Name="Rep_Nombre" ColumnName="Rep_Nombre" />
-                <ScalarProperty Name="Giro_Comercial" ColumnName="Giro_Comercial" />
-                <ScalarProperty Name="Estratificacion" ColumnName="Estratificacion" />
-                <ScalarProperty Name="Pagina_Web" ColumnName="Pagina_Web" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
-                <ScalarProperty Name="Municipio" ColumnName="Municipio" />
-                <ScalarProperty Name="Localidad" ColumnName="Localidad" />
-                <ScalarProperty Name="Codigo_Postal" ColumnName="Codigo_Postal" />
-                <ScalarProperty Name="No_Interior" ColumnName="No_Interior" />
-                <ScalarProperty Name="No_Exterior" ColumnName="No_Exterior" />
-                <ScalarProperty Name="Colonia" ColumnName="Colonia" />
-                <ScalarProperty Name="Calle" ColumnName="Calle" />
-                <ScalarProperty Name="CURP" ColumnName="CURP" />
-                <ScalarProperty Name="RFC" ColumnName="RFC" />
-                <ScalarProperty Name="Razon_Social" ColumnName="Razon_Social" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Proveedores_Validacion">
             <EntityTypeMapping TypeName="ProveedoresModel.Proveedores_Validacion">
               <MappingFragment StoreEntitySet="Proveedores_Validacion">
@@ -2486,6 +2443,49 @@
                 <ScalarProperty Name="fechaSolicitud" ColumnName="fechaSolicitud" />
                 <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proveedores">
+            <EntityTypeMapping TypeName="ProveedoresModel.Proveedores">
+              <MappingFragment StoreEntitySet="Proveedores">
+                <ScalarProperty Name="Fecha_Alta" ColumnName="Fecha_Alta" />
+                <ScalarProperty Name="IdTipoTramite" ColumnName="IdTipoTramite" />
+                <ScalarProperty Name="IdTipoPersona" ColumnName="IdTipoPersona" />
+                <ScalarProperty Name="Fecha_Aceptacion" ColumnName="Fecha_Aceptacion" />
+                <ScalarProperty Name="Fecha_Solicitud" ColumnName="Fecha_Solicitud" />
+                <ScalarProperty Name="Ban_Clabe" ColumnName="Ban_Clabe" />
+                <ScalarProperty Name="Ban_Sucursal" ColumnName="Ban_Sucursal" />
+                <ScalarProperty Name="Ban_Cuenta" ColumnName="Ban_Cuenta" />
+                <ScalarProperty Name="Ban_Banco" ColumnName="Ban_Banco" />
+                <ScalarProperty Name="Tra_Correo_E" ColumnName="Tra_Correo_E" />
+                <ScalarProperty Name="Tra_Extension" ColumnName="Tra_Extension" />
+                <ScalarProperty Name="Tra_Telefono" ColumnName="Tra_Telefono" />
+                <ScalarProperty Name="Rep_Personal_Tramite" ColumnName="Rep_Personal_Tramite" />
+                <ScalarProperty Name="Rep_Notario_Notaria" ColumnName="Rep_Notario_Notaria" />
+                <ScalarProperty Name="Rep_Numero_Poder" ColumnName="Rep_Numero_Poder" />
+                <ScalarProperty Name="Rep_Numero_Acta" ColumnName="Rep_Numero_Acta" />
+                <ScalarProperty Name="Rep_Correo_E" ColumnName="Rep_Correo_E" />
+                <ScalarProperty Name="Rep_Extension" ColumnName="Rep_Extension" />
+                <ScalarProperty Name="Rep_Telefono" ColumnName="Rep_Telefono" />
+                <ScalarProperty Name="Rep_Nombre" ColumnName="Rep_Nombre" />
+                <ScalarProperty Name="Giro_Comercial" ColumnName="Giro_Comercial" />
+                <ScalarProperty Name="Estratificacion" ColumnName="Estratificacion" />
+                <ScalarProperty Name="Pagina_Web" ColumnName="Pagina_Web" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Municipio" ColumnName="Municipio" />
+                <ScalarProperty Name="Localidad" ColumnName="Localidad" />
+                <ScalarProperty Name="Codigo_Postal" ColumnName="Codigo_Postal" />
+                <ScalarProperty Name="No_Interior" ColumnName="No_Interior" />
+                <ScalarProperty Name="No_Exterior" ColumnName="No_Exterior" />
+                <ScalarProperty Name="Colonia" ColumnName="Colonia" />
+                <ScalarProperty Name="Calle" ColumnName="Calle" />
+                <ScalarProperty Name="CURP" ColumnName="CURP" />
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="Razon_Social" ColumnName="Razon_Social" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

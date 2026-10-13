@@ -1,10 +1,14 @@
-﻿
-app.controller('proveedoresController', function ($scope, $http) {
+﻿app.controller('proveedoresController', function ($scope, $http) {
 
-    /* 1. MODELO DEL PROVEEDOR */
+    // =========================================
+    // CONTROL DE BLOQUEO DE BOTÓN
+    // =========================================
+    $scope.guardando = false;
 
+    // =========================================
+    // 1. MODELO DEL PROVEEDOR
+    // =========================================
     $scope.proveedor = {
-
         IdTipoPersona: null,
 
         // Datos generales
@@ -51,33 +55,28 @@ app.controller('proveedoresController', function ($scope, $http) {
     };
 
     $scope.documentos = [];
-    /* 2. SELECCIÓN DE TIPO DE PERSONA */
 
-    $scope.seleccionarPersona = function (tipo) {
-        if (tipo === 'F') {
-            $scope.proveedor.IdTipoPersona = 1;
-        }
-        if (tipo === 'M') {
-            $scope.proveedor.IdTipoPersona = 2;
-        }
-    };
-
-
-    /* 3. DOCUMENTOS */
-
+    // =========================================
+    // 2. DOCUMENTOS
+    // =========================================
     $scope.agregarDocumento = function (archivo, idTipoDocumento) {
 
         if (!archivo) return;
 
         if (archivo.type !== 'application/pdf') {
-            alert('Solo se permiten archivos PDF');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Incompatibilidad de archivos',
+                text: 'Solo se permiten archivos PDF',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#28a745'
+            });
             return;
         }
 
         var existe = $scope.documentos.some(d => d.idTipoDocumento === idTipoDocumento);
 
         if (existe) {
-            alert('Este documento ya fue cargado');
             return;
         }
 
@@ -89,27 +88,74 @@ app.controller('proveedoresController', function ($scope, $http) {
         $scope.$applyAsync();
     };
 
-
-
-    /* 4. GUARDAR TODO */
-
+    // =========================================
+    // 3. GUARDAR TODO
+    // =========================================
     $scope.guardarTodo = function () {
 
-        // VALIDAR FORMULARIO
+        if ($scope.guardando) return;
+
+        // ===============================
+        // VALIDACIÓN SOCIOS (MORAL)
+        // ===============================
+        if ($scope.proveedor.IdTipoPersona == 2) {
+            if (!$scope.proveedor.Fax || $scope.proveedor.Fax.trim() === "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campo obligatorio',
+                    text: 'Debe capturar el nombre de socios y/o accionistas para persona moral',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#28a745'
+                });
+                return;
+            }
+        }
+
+        // ===============================
+        // VALIDACIÓN CURP (FÍSICA)
+        // ===============================
+        if ($scope.proveedor.IdTipoPersona == 1) {
+            if (!$scope.proveedor.CURP || $scope.proveedor.CURP.trim() === "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campo obligatorio',
+                    text: 'La CURP es obligatoria para Persona Física',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#28a745'
+                });
+                return;
+            }
+        }
+
+        // ===============================
+        // VALIDACIÓN FORMULARIO
+        // ===============================
         if ($scope.formRegistro.$invalid) {
-            alert('Completa todos los campos obligatorios correctamente');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campos faltantes',
+                text: 'Completa todos los campos obligatorios correctamente',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#28a745'
+            });
             return;
         }
 
-        
+        // ===============================
+        // BLOQUEAR BOTÓN
+        // ===============================
+        $scope.guardando = true;
 
+        // ===============================
         // GUARDAR PROVEEDOR
+        // ===============================
         $http.post('/Proveedores/GuardarProveedor', $scope.proveedor)
+
             .then(function (response) {
 
                 if (!response.data.success) {
-                    alert(response.data.message);
-                    throw 'Error proveedor';
+                    $scope.guardando = false;
+                    return Promise.reject(response.data.message);
                 }
 
                 var proveedorId = response.data.proveedorId;
@@ -128,29 +174,46 @@ app.controller('proveedoresController', function ($scope, $http) {
                     transformRequest: angular.identity,
                     headers: { 'Content-Type': undefined }
                 });
-
             })
+
             .then(function (response) {
 
-                if (response.data.success) {
-
-                    alert('Proveedor y documentos guardados correctamente');
-
-                    window.open('/Proveedores/GenerarReporteProveedor?idProveedor=' + $scope.proveedorIdGenerado, '_blank');
-
-                    $scope.limpiarFormulario();
-
-                } else {
-                    alert(response.data.message);
+                if (!response.data.success) {
+                    return Promise.reject(response.data.message);
                 }
 
-            });
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro exitoso',
+                    text: 'La información y documentos fueron guardados con éxito',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#28a745'
+                });
 
+                window.open('/Proveedores/GenerarReporteProveedor?idProveedor=' + $scope.proveedorIdGenerado, '_blank');
+
+                $scope.limpiarFormulario();
+                $scope.guardando = false;
+            })
+
+            .catch(function (error) {
+
+                console.error(error);
+
+                $scope.guardando = false;
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error || 'Ocurrió un error al guardar. Intenta nuevamente.',
+                    confirmButtonColor: '#dc3545'
+                });
+            });
     };
 
-
-    /* 5. LIMPIAR FORMULARIO */
-
+    // =========================================
+    // 4. LIMPIAR FORMULARIO
+    // =========================================
     $scope.limpiarFormulario = function () {
 
         $scope.proveedor = {
@@ -158,60 +221,43 @@ app.controller('proveedoresController', function ($scope, $http) {
         };
 
         $scope.documentos = [];
+
+        if ($scope.formRegistro) {
+            $scope.formRegistro.$setPristine();
+            $scope.formRegistro.$setUntouched();
+        }
+
+        // LIMPIAR INPUT FILE 
+        setTimeout(function () {
+            var inputs = document.querySelectorAll('.input-documento');
+            inputs.forEach(function (input) {
+                input.value = null;
+            });
+        }, 0);
     };
 
+    // =========================================
+    // 5. VALIDACIONES DE DOCUMENTOS
+    // =========================================
     $scope.documentosRequeridos = function () {
 
-        if ($scope.proveedor.IdTipoPersona == 1) {
+        if ($scope.proveedor.IdTipoPersona == 1)
             return [1, 2, 3, 4, 5];
-        }
 
-        if ($scope.proveedor.IdTipoPersona == 2) {
+        if ($scope.proveedor.IdTipoPersona == 2)
             return [6, 7, 8, 9, 4, 5];
-        }
 
         return [];
     };
 
-    $scope.validarDocumentos = function () {
-
-        var requeridos = $scope.documentosRequeridos();
-
-        var cargados = $scope.documentos.map(d => d.idTipoDocumento);
-
-        return requeridos.every(r => cargados.includes(r));
-    };
-
-
     $scope.formularioValido = function () {
 
-        // VALIDAR CAMPOS
-        //for (var prop in $scope.proveedor) {
+        if (!$scope.proveedor.IdTipoPersona) return false;
 
-        //    if ($scope.proveedor[prop] === null || $scope.proveedor[prop] === '') {
-        //        return false;
-        //    }
-        //}
-
-        // VALIDAR DOCUMENTOS SEGÚN TIPO
-        if ($scope.proveedor.IdTipoPersona == 1) {
-            // Persona Física necesita 1-5
-            var requeridos = [1, 2, 3, 4, 5];
-        } else if ($scope.proveedor.IdTipoPersona == 2) {
-            // Persona Moral necesita 4,5,6,7,8,9
-            var requeridos = [4, 5, 6, 7, 8, 9];
-        } else {
-            return false;
-        }
-
+        var requeridos = $scope.documentosRequeridos();
         var tiposSubidos = $scope.documentos.map(d => d.idTipoDocumento);
 
-        for (var i = 0; i < requeridos.length; i++) {
-            if (!tiposSubidos.includes(requeridos[i])) {
-                return false;
-            }
-        }
-
-        return true;
+        return requeridos.every(r => tiposSubidos.includes(r));
     };
+
 });

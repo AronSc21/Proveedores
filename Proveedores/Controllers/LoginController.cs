@@ -56,7 +56,7 @@ namespace Proveedores.Controllers
         {
             if (Session["UsuarioId"] == null)
                 return RedirectToAction("Login");
-
+            ViewBag.Rol = Session["Rol"];
             ViewBag.DescargarValidacion = TempData["DescargarValidacion"];
             ViewBag.DescargarActualizacion = TempData["DescargarActualizacion"];
             ViewBag.DescargarValidacionRefrendo = TempData["DescargarValidacionRefrendo"];
@@ -95,6 +95,9 @@ namespace Proveedores.Controllers
                 case 7: return "Poder Notarial del Representante Legal o Apoderado inscrito en el Registro Público";
                 case 8: return "Identificación Oficial del Representante Legal";
                 case 9: return "Registro Federal de Contribuyentes";
+                case 10: return "Expediente Completo";
+                case 11: return "Pre-registro Firmado";
+                case 12: return "Oficio de Alta Firmado";
                 default: return "Documento desconocido";
             }
         }
@@ -143,11 +146,11 @@ namespace Proveedores.Controllers
 
             if (proveedor.IdTipoPersona == 1)
             {
-                docsRequeridos = new List<int> { 1, 2, 3, 4, 5 };
+                docsRequeridos = new List<int> { 1, 2, 3, 4, 5, 10, 11, 12 };
             }
             else if (proveedor.IdTipoPersona == 2)
             {
-                docsRequeridos = new List<int> { 4, 5, 6, 7, 8, 9 };
+                docsRequeridos = new List<int> { 4, 5, 6, 7, 8, 9, 10, 11, 12 };
             }
 
             ViewBag.DocumentosRequeridos = docsRequeridos;
@@ -162,7 +165,10 @@ namespace Proveedores.Controllers
     {6, "Acta Constitutiva"},
     {7, "Poder Notarial"},
     {8, "Identificación Representante Legal"},
-    {9, "RFC"}
+    {9, "RFC"},
+    {10, "Expediente Completo"},
+    {11, "Pre-registro Firmado"},
+    {12, "Oficio de Alta Firmado"}
 };
 
             ViewBag.NombresDocumentos = nombresDocs;

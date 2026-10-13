@@ -5,6 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Lista de Proveedores";
 }
+
+@{
+    bool esAdmin = (ViewBag.Rol != null && (int)ViewBag.Rol == 1);
+}
+
 <div class="encabezado-login">
     <div class="encabezado-contenido">
 
@@ -27,8 +32,8 @@
         <div class="col-md-12">
 
             @*<h3 style="display:inline-block; margin:0;">
-                Padrón de Proveedores
-            </h3>*@
+                    Padrón de Proveedores
+                </h3>*@
 
             <a href="@Url.Action("Logout", "Login")"
                class="btn btn-danger"
@@ -96,7 +101,7 @@
                 <th>Giro Comercial</th>
                 <th>Tipo Persona</th>
                 <th>Pre-registro validado</th>
-                <th>Detalles</th>
+                @*<th>Detalles</th>*@
                 <th>Validar Pre-registro</th>
                 <th>Modificación</th>
                 <th>Fecha de vigencia</th>
@@ -132,27 +137,56 @@
                         }
                     </td>
 
-                    <td>
+                    @*<td>
                         <a href="@Url.Action("Datos", "Login", new { id = p.Id })"
                            class="btn btn-info btn-sm">
                             Ver
                         </a>
+                    </td>*@
+
+                    <td>
+                        @if (esAdmin)
+                        {
+                            <a href="@Url.Action("Datos", "Login", new { id = p.Id, modo = "validar" })"
+                               class="btn btn-primary btn-sm"
+                               style="background-color:#2c7be5; border-color:#2c7be5;">
+                                Validar
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                Validar
+                            </button>
+                        }
+
+                        @*<a href="@Url.Action("Datos", "Login", new { id = p.Id, modo = "validar" })"
+           class="btn btn-primary btn-sm"
+           style="background-color:#2c7be5; border-color:#2c7be5;">
+            Validar
+        </a>*@
                     </td>
 
                     <td>
-                        <a href="@Url.Action("Datos", "Login", new { id = p.Id, modo = "validar" })"
-                           class="btn btn-primary btn-sm"
-                           style="background-color:#2c7be5; border-color:#2c7be5;">
-                            Validar
-                        </a>
-                    </td>
-
-                    <td>
-                        <a href="@Url.Action("Datos", "Login", new { id = p.Id, modo = "editar" })"
-                           class="btn btn-sm"
-                           style="background-color:#17a2b8; color:white;">
-                            Modificar
-                        </a>
+                        @if (esAdmin)
+                        {
+                            <a href="@Url.Action("Datos", "Login", new { id = p.Id, modo = "editar" })"
+                               class="btn btn-sm"
+                               style="background-color:#17a2b8; color:white;">
+                                Modificar
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                Modificar
+                            </button>
+                        }
+                        @*<a href="@Url.Action("Datos", "Login", new { id = p.Id, modo = "editar" })"
+           class="btn btn-sm"
+           style="background-color:#17a2b8; color:white;">
+            Modificar
+        </a>*@
                     </td>
 
                     <td>
@@ -160,10 +194,19 @@
                         {
                             if (pendiente)
                             {
-                                <a href="@Url.Action("ValidarRefrendo","Login", new { id = p.Id })"
-                                   class="btn btn-danger btn-sm">
-                                    @vigencia.Value.ToString("dd/MM/yyyy")
-                                </a>
+                                if (esAdmin)
+                                {
+                                    <a href="@Url.Action("ValidarRefrendo","Login", new { id = p.Id })"
+                                       class="btn btn-danger btn-sm">
+                                        @vigencia.Value.ToString("dd/MM/yyyy")
+                                    </a>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary btn-sm" disabled>
+                                        @vigencia.Value.ToString("dd/MM/yyyy")
+                                    </button>
+                                }
                             }
                             else
                             {
@@ -178,6 +221,28 @@
                                 -
                             </button>
                         }
+                        @*@if (vigencia != null)
+        {
+            if (pendiente)
+            {
+                <a href="@Url.Action("ValidarRefrendo","Login", new { id = p.Id })"
+                   class="btn btn-danger btn-sm">
+                    @vigencia.Value.ToString("dd/MM/yyyy")
+                </a>
+            }
+            else
+            {
+                <button class="btn btn-default btn-sm" disabled>
+                    @vigencia.Value.ToString("dd/MM/yyyy")
+                </button>
+            }
+        }
+        else
+        {
+            <button class="btn btn-default btn-sm" disabled>
+                -
+            </button>
+        }*@
                     </td>
 
                 </tr>

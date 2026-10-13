@@ -33,12 +33,12 @@ namespace Proveedores
         public virtual DbSet<Documentos_Proveedor> Documentos_Proveedor { get; set; }
         public virtual DbSet<Requisitos_Tramite> Requisitos_Tramite { get; set; }
         public virtual DbSet<Permisos> Permisos { get; set; }
-        public virtual DbSet<Proveedores> Proveedores { get; set; }
         public virtual DbSet<Proveedores_Validacion> Proveedores_Validacion { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Roles_Permisos> Roles_Permisos { get; set; }
         public virtual DbSet<Usuarios_Proveedores> Usuarios_Proveedores { get; set; }
         public virtual DbSet<Refrendos> Refrendos { get; set; }
+        public virtual DbSet<Proveedores> Proveedores { get; set; }
     
         public virtual ObjectResult<csp_buscar_provedor_RFC_Result> csp_buscar_provedor_RFC(string rFC, Nullable<int> numProveedor)
         {

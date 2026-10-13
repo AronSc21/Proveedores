@@ -15,6 +15,11 @@
             <form method="post"
                   action="@Url.Action("BuscarRefrendo","Proveedores")">
 
+                @*<form method="post"
+              id="formRefrendo"
+              action="@Url.Action("GenerarRefrendo","Proveedores")">
+            <input type="hidden" name="recaptchaToken" id="recaptchaToken" />*@
+
                 <div class="form-group">
                     <label>No. Proveedor</label>
                     <input type="text"
@@ -110,6 +115,12 @@
                                 Generar solicitud de refrendo
                             </button>
 
+                            @*<button type="button"
+                                    class="btn btn-success"
+                                    onclick="ejecutarRecaptchaRefrendo()">
+                                Generar solicitud de refrendo
+                            </button>*@
+
                         </form>
                     }
                     else
@@ -159,4 +170,23 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
     </script>
+    @*<script src="https://www.google.com/recaptcha/api.js?render=6LeZrLUsAAAAAIZMJPmh8yGXn3CeVOalPVK0JB5l"></script>
+    <script>
+        function ejecutarRecaptchaRefrendo() {
+
+            grecaptcha.ready(function () {
+
+                grecaptcha.execute('TU_SITE_KEY', { action: 'refrendo' })
+                    .then(function (token) {
+
+                        // 🔐 meter token al form
+                        document.getElementById("recaptchaToken").value = token;
+
+                        // 🚀 enviar form manualmente
+                        document.getElementById("formRefrendo").submit();
+                    });
+
+            });
+        }
+    </script>*@
 }

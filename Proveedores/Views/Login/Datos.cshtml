@@ -258,13 +258,13 @@
                                        @(ViewBag.Modo == "editar" ? "" : "readonly") />
                             </div>
 
-                            <div class="col-md-4">
-                                <label>Fax</label>
-                                <input class="form-control"
-                                       name="Fax"
-                                       value="@Model.Fax"
-                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
-                            </div>
+                            @*<div class="col-md-4">
+            <label>Fax</label>
+            <input class="form-control"
+                   name="Fax"
+                   value="@Model.Fax"
+                   @(ViewBag.Modo == "editar" ? "" : "readonly") />
+        </div>*@
 
                             <div class="col-md-4">
                                 <label>Página Web</label>
@@ -273,6 +273,41 @@
                                        value="@Model.Pagina_Web"
                                        @(ViewBag.Modo == "editar" ? "" : "readonly") />
                             </div>
+                            <div class="panel-heading">
+            <h4>PERSONAL DESIGNADO PARA TRÁMITES</h4>
+        </div>
+
+        <div class="col-md-4">
+            <label>Personal designado para trámites antes la institución</label>
+            <input class="form-control"
+                   name="Rep_personal_Tramite"
+                   value="@Model.Rep_Personal_Tramite"
+                   @(ViewBag.Modo == "editar" ? "" : "readonly") />
+        </div>
+
+        <div class="col-md-4">
+            <label>Teléfono</label>
+            <input class="form-control"
+                   name="Tra_Telefono"
+                   value="@Model.Tra_Telefono"
+                   @(ViewBag.Modo == "editar" ? "" : "readonly") />
+        </div>
+
+        <div class="col-md-4">
+            <label>Extensión</label>
+            <input class="form-control"
+                   name="Tra_Extension"
+                   value="@Model.Tra_Extension"
+                   @(ViewBag.Modo == "editar" ? "" : "readonly") />
+        </div>
+
+        <div class="col-md-4">
+            <label>Correo Electrónico</label>
+            <input class="form-control"
+                   name="Tra_Correo_E"
+                   value="@Model.Tra_Correo_E"
+                   @(ViewBag.Modo == "editar" ? "" : "readonly") />
+        </div>
                         </div>
                     </div>
                 </div>
@@ -343,9 +378,16 @@
                                        @(ViewBag.Modo == "editar" ? "" : "readonly") />
                             </div>
 
+                            <div class="col-md-4">
+                                <label>Nombre de socios y/o accionistas</label>
+                                <input class="form-control"
+                                       name="Fax"
+                                       value="@Model.Fax"
+                                       @(ViewBag.Modo == "editar" ? "" : "readonly") />
+                            </div>
                             <br />
 
-                            <div class="panel-heading">
+                            @*<div class="panel-heading">
                                 <h4>PERSONAL DESIGNADO PARA TRÁMITES</h4>
                             </div>
 
@@ -379,7 +421,7 @@
                                        name="Tra_Correo_E"
                                        value="@Model.Tra_Correo_E"
                                        @(ViewBag.Modo == "editar" ? "" : "readonly") />
-                            </div>
+                            </div>*@
 
                         </div>
                     </div>
@@ -558,17 +600,17 @@
         else
         {
             <p>No hay documentos cargados.</p>
-        }
-        @if (ViewBag.Modo == "validar" && Model.Fecha_Aceptacion == null)
-        {
-            <div style="text-align:right; margin-top:15px;">
-                <button type="button"
-                        id="btnValidar"
-                        class="btn btn-success">
-                    Validar información
-                </button>
-            </div>
         }*@
+                        @if (ViewBag.Modo == "validar" && Model.Fecha_Aceptacion == null)
+                        {
+                            <div style="text-align:right; margin-top:15px;">
+                                <button type="button"
+                                        id="btnValidar"
+                                        class="btn btn-success">
+                                    Validar información
+                                </button>
+                            </div>
+                        }
                     </div>
                 </div>
 
